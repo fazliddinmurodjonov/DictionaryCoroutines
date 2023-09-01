@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="selected_item">#BF1323</color>
+    <color name="unselected_item">#A5A4AC</color>
+    <color name="red_one">#C61D3E</color>
+    <color name="red_two">#E72D52</color>
+    <color name="red_three">#BF1323</color>
+    <color name="red_four">#C41035</color>
+    <color name="light_gray">#C2C5CA</color>
+    <color name="gray">#9C9394</color>
+    <color name="dark_gray">#999999</color>
+    <color name="light_yellow">#E6CEAC</color>
+    <color name="light_brow">#F8F1E7</color>
+    <color name="brown">#C0A089</color>
+    <color name="tv_color">#14192D</color>
+    <color name="bg_code">#FBFBFB</color>
+    <color name="bg">@color/red_one</color>
+    <color name="bg_card">@color/white</color>
+    <color name="icon">@color/black</color>
+</resources>
