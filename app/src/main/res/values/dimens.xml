@@ -7,7 +7,7 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="indicator_radius">5dp</dimen>
     <dimen name="indicator_height">3dp</dimen>
-    <dimen name="indicator_width">56dp</dimen>
+    <dimen name="indicator_width">65dp</dimen>
     <dimen name="desired_drawable_width">100dp</dimen>
     <dimen name="desired_drawable_height">100dp</dimen>
 </resources>

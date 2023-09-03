@@ -18,5 +18,5 @@
     <color name="bg_code">#FBFBFB</color>
     <color name="bg">@color/red_one</color>
     <color name="bg_card">@color/white</color>
-    <color name="icon">@color/black</color>
+    <color name="icon">#14192D</color>
 </resources>
