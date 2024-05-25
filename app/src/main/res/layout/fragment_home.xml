@@ -134,13 +134,16 @@
     <LinearLayout
         android:id="@+id/wordLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:gravity="center"
+        android:background="@drawable/bg_word_layout"
         android:orientation="vertical">
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cvWord"
+            app:cardMaxElevation="1dp"
+            app:cardElevation="0.1dp"
+            app:cardPreventCornerOverlap="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
