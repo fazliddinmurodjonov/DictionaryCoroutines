@@ -14,7 +14,7 @@
     <color name="dark_gray">#999999</color>
     <color name="light_yellow">#E6CEAC</color>
     <color name="light_brow">#F8F1E7</color>
-    <color name="brown">#C0A089</color>
+    <color name="brown">#C5A691</color>
     <color name="tv_color">#14192D</color>
     <color name="bg_code">#FBFBFB</color>
     <color name="bg">@color/red_one</color>
@@ -23,5 +23,4 @@
     <color name="bg_splash">#FFFFFF</color>
     <color name="white_70">#B3FFFFFF</color>
     <color name="ripple_color">#33BF1323</color>
-
 </resources>

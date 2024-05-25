@@ -9,4 +9,7 @@
     <string name="clear">Clear</string>
     <string name="share">Share</string>
     <string name="info">Info</string>
+    <string name="found_words">Found 6969 words</string>
+    <string name="word_of_the_day">Word of the Day</string>
+    <string name="copy">Copy</string>
 </resources>

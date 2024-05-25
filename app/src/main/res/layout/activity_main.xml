@@ -16,6 +16,8 @@
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"
+        app:itemRippleColor="@null"
+        app:subheaderColor="@null"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
@@ -27,7 +29,6 @@
         app:itemShapeFillColor="@color/bg_card"
         app:itemTextAppearance="@style/NavigationTextStyle"
         app:itemTextColor="@color/tv_color"
-        app:menu="@menu/activity_main_drawer"
-        tools:ignore="MissingConstraints" />
+        app:menu="@menu/activity_main_drawer" />
 
 </androidx.drawerlayout.widget.DrawerLayout>

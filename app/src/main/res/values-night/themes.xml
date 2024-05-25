@@ -11,12 +11,15 @@
         <item name="colorOnSecondary">@color/black</item>
         <item name="android:icon">@color/black</item>
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <item name="android:windowBackground">@drawable/bg_splash_night</item>
     </style>
+
     <style name="NavigationTextStyle" parent="android:Widget.TextView">
         <item name="android:fontFamily">@font/roboto_slab</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">16sp</item>
     </style>
+
     <style name="AppNavigationViewStyle" parent="Widget.Design.NavigationView">
         <item name="android:background">@color/bg_card</item>
     </style>
