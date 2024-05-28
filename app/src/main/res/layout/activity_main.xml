@@ -28,6 +28,7 @@
         app:headerLayout="@layout/nav_header_main"
         app:itemShapeFillColor="@color/bg_card"
         app:itemTextAppearance="@style/NavigationTextStyle"
+        app:itemTextAppearanceActiveBoldEnabled="true"
         app:itemTextColor="@color/tv_color"
         app:menu="@menu/activity_main_drawer" />
 

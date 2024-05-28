@@ -15,6 +15,7 @@
     <color name="light_yellow">#E6CEAC</color>
     <color name="light_brow">#F8F1E7</color>
     <color name="brown">#C5A691</color>
+    <color name="dark_brown">#9914192D</color>
     <color name="tv_color">#14192D</color>
     <color name="bg_code">#FBFBFB</color>
     <color name="bg">@color/red_one</color>

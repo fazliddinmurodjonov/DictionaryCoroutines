@@ -16,7 +16,8 @@
         android:fontFamily="@font/roboto_slab"
         android:gravity="center"
         android:text="@string/found_words"
-        android:textColor="@color/white_70" />
+        android:textColor="@color/white"
+        android:textSize="16sp" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -43,7 +44,7 @@
             android:paddingStart="10dp"
             android:paddingEnd="25dp"
             android:textColor="@color/black"
-            android:textColorHint="@color/dark_gray"
+            android:textColorHint="@color/gray"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -58,12 +59,14 @@
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="@id/etSearchWord"
             app:layout_constraintTop_toTopOf="@id/etSearchWord">
-
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cvMicrophoneOfSearch"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_gravity="center"
+                android:layout_marginEnd="-15dp"
+                android:clickable="true"
+                android:focusable="true"
                 app:cardBackgroundColor="@android:color/transparent"
                 app:cardCornerRadius="50dp"
                 app:rippleColor="@color/ripple_color"
@@ -71,10 +74,12 @@
 
                 <ImageView
                     android:id="@+id/imageMicrophoneOfSearch"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:contentDescription="@null"
+                    android:scaleX="0.6"
+                    android:scaleY="0.6"
                     android:src="@drawable/microphone" />
             </com.google.android.material.card.MaterialCardView>
 
@@ -84,6 +89,8 @@
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_gravity="center"
+                android:clickable="true"
+                android:focusable="true"
                 app:cardBackgroundColor="@android:color/transparent"
                 app:cardCornerRadius="50dp"
                 app:rippleColor="@color/ripple_color"
@@ -91,10 +98,12 @@
 
                 <ImageView
                     android:id="@+id/imgCopyOfSearch"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:contentDescription="@null"
+                    android:scaleX="0.6"
+                    android:scaleY="0.6"
                     android:src="@drawable/copy_search" />
             </com.google.android.material.card.MaterialCardView>
 
@@ -163,7 +172,7 @@
                     android:layout_gravity="center"
                     android:layout_marginTop="25dp"
                     android:layout_marginBottom="10dp"
-                    android:fontFamily="@font/roboto_slab_bold"
+                    android:fontFamily="@font/roboto_slab"
                     android:gravity="center"
                     android:text="@string/bookmark"
                     android:textColor="@color/tv_color"
@@ -182,10 +191,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginStart="?actionBarSize"
+                    android:layout_marginStart="45dp"
                     android:layout_marginTop="15dp"
-                    android:layout_marginEnd="?actionBarSize"
-                    android:layout_marginBottom="25dp">
+                    android:layout_marginEnd="45dp"
+                    android:layout_marginBottom="35dp">
 
                     <include
                         android:id="@+id/copyLayout"
@@ -194,12 +203,12 @@
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="5dp"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@id/audioLayout"
+                        app:layout_constraintEnd_toStartOf="@id/soundLayout"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <include
-                        android:id="@+id/audioLayout"
+                        android:id="@+id/soundLayout"
                         layout="@layout/item_word_management_function"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -219,7 +228,7 @@
                         android:layout_marginEnd="5dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@id/shareLayout"
-                        app:layout_constraintStart_toEndOf="@id/audioLayout"
+                        app:layout_constraintStart_toEndOf="@id/soundLayout"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <include

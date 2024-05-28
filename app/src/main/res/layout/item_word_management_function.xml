@@ -6,16 +6,21 @@
     android:orientation="vertical">
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/cvCopyWord"
+        android:id="@+id/cvWordFunction"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
+        android:clickable="true"
+        android:focusable="true"
+        app:rippleColor="@color/brown"
         app:cardBackgroundColor="@color/bg_card"
         app:cardCornerRadius="8dp"
         app:strokeWidth="0dp">
 
         <LinearLayout
             android:layout_width="match_parent"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:paddingTop="10dp"
@@ -23,8 +28,8 @@
 
             <ImageView
                 android:id="@+id/imgWordFunction"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:contentDescription="@null"
                 android:src="@drawable/copy_word" />
@@ -38,10 +43,8 @@
                 android:fontFamily="@font/roboto_slab"
                 android:gravity="center"
                 android:text="@string/copy"
-                android:textColor="@color/brown"
-                android:textSize="12sp" />
+                android:textColor="@color/dark_brown"
+                android:textSize="14sp" />
         </LinearLayout>
-
-
     </com.google.android.material.card.MaterialCardView>
 </LinearLayout>

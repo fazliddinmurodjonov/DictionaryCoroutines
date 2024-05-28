@@ -14,6 +14,11 @@
         <item name="android:windowLightNavigationBar">true</item>
         <item name="android:navigationBarColor">@color/bg_card</item>
         <item name="android:windowBackground">@drawable/bg_splash_day</item>
+        <item name="navigationViewStyle">@style/CustomNavigationView</item>
+    </style>
+
+    <style name="CustomNavigationView" parent="Widget.MaterialComponents.NavigationView">
+        <item name="itemTextAppearance">@style/NavigationTextStyle</item>
     </style>
 
     <style name="Theme.DictionaryWithCoroutines.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
