@@ -22,6 +22,7 @@
             android:layout_gravity="center"
             android:theme="?attr/actionBarSize"
             app:navigationIcon="@drawable/menu_hamburger"
+            android:background="@color/red_four"
             app:popupTheme="@style/Theme.DictionaryWithCoroutines.PopupOverlay"
             app:titleTextAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar"
             app:titleTextColor="@color/white" />

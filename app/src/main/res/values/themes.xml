@@ -29,6 +29,7 @@
         <item name="android:textStyle">normal</item>
         <item name="android:gravity">center_horizontal</item>
         <item name="android:textColor">@color/white</item>
+        <item name="background">@color/red_four</item>
     </style>
     <style name="NavigationTextStyle" parent="android:Widget.TextView">
         <item name="android:fontFamily">@font/roboto_slab</item>
