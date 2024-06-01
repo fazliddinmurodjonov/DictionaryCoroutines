@@ -9,6 +9,8 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
@@ -18,7 +20,11 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.brightfuture.dictionary.databinding.ActivityMainBinding
 import com.brightfuture.utils.CustomValues
+import com.brightfuture.utils.CustomizeViews
 import com.google.android.material.navigation.NavigationView
+import java.io.File
+import java.io.FileOutputStream
+import java.net.URL
 
 
 class MainActivity : AppCompatActivity() {
@@ -32,13 +38,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun createUI() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            installSplashScreen()
-        } else {
-            setTheme(R.style.Theme_DictionaryWithCoroutines)
-        }
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        CustomizeViews.appearanceStatusNavigationBars(window, 0)
+        CustomizeViews.statusNavigationBarsColor(window, this, R.color.red_four, R.color.white)
+        clickMenu()
     }
 
     private fun createNavigation() {
@@ -72,10 +76,31 @@ class MainActivity : AppCompatActivity() {
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 
+    private fun clickMenu() {
+        val shareItem = binding.navView.menu.findItem(R.id.nav_share)
+        val aboutItem = binding.navView.menu.findItem(R.id.nav_info)
+        shareItem.setOnMenuItemClickListener {
+            CustomizeViews.shareApp(this)
+            closeDrawer()
+            true
+        }
+        aboutItem.setOnMenuItemClickListener {
+            CustomizeViews.showBottomSheetDialog(supportFragmentManager, "about_app")
+            closeDrawer()
+            true
+        }
+
+    }
+    private fun closeDrawer() {
+        val drawer = findViewById<DrawerLayout>(R.id.drawer_layout)
+        drawer.closeDrawer(GravityCompat.START)
+    }
+
     override fun attachBaseContext(newBase: Context?) {
         val newOverride = Configuration(newBase?.resources?.configuration)
         newOverride.fontScale = 1.0f
         applyOverrideConfiguration(newOverride)
         super.attachBaseContext(newBase)
     }
+
 }

@@ -1,60 +1,54 @@
 package com.brightfuture.fragments
 
+
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
+import by.kirich1409.viewbindingdelegate.viewBinding
+import com.brightfuture.adapters.WordsAdapter
 import com.brightfuture.dictionary.R
+import com.brightfuture.dictionary.databinding.FragmentSearchBinding
+import com.brightfuture.room.entity.Word
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+class SearchFragment : Fragment(R.layout.fragment_search) {
+    private val binding: FragmentSearchBinding by viewBinding()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        createUI()
+    }
 
-/**
- * A simple [Fragment] subclass.
- * Use the [SearchFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class SearchFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+    private fun createUI() {
+        with(binding)
+        {
+            fontLayout.imgWordFunction.setImageResource(R.drawable.font_size)
+            copyLayout.imgWordFunction.setImageResource(R.drawable.copy_word_search)
+            bookmarkLayout.imgWordFunction.setImageResource(R.drawable.bookmark_search)
+            shareLayout.imgWordFunction.setImageResource(R.drawable.share_search)
+            fontLayout.tvWordFunction.text =
+                resources.getText(R.string.sound).toString().lowercase()
+            copyLayout.tvWordFunction.text = resources.getText(R.string.copy).toString().lowercase()
+            bookmarkLayout.tvWordFunction.text =
+                resources.getText(R.string.save).toString().lowercase()
+            shareLayout.tvWordFunction.text =
+                resources.getText(R.string.share).toString().lowercase()
         }
+
+        val wordsAdapter = WordsAdapter()
+
+        val wordsList = ArrayList<Word>()
+        for (i in 0..100) {
+            wordsList.add(Word(name = "Hello",
+                phonetic = "fɪˈnɛtɪk",
+                audioLink = "http://example.com/audio.mp3",
+                definition = "The study and classification of speech sounds",
+                example = "She is studying phonetics",
+                bookmark = 1,
+                seen = 1
+            ))        }
+        wordsAdapter.submitList(wordsList)
+        binding.rvAllWords.adapter = wordsAdapter
+
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?,
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_search, container, false)
-    }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment SearchFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            SearchFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
-    }
 }

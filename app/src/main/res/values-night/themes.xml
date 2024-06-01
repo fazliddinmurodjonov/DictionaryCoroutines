@@ -10,6 +10,9 @@
         <item name="colorSecondaryVariant">@color/red_one</item>
         <item name="colorOnSecondary">@color/black</item>
         <item name="android:icon">@color/black</item>
+        <item name="colorAccent">@color/ripple_color</item>
+        <item name="android:textColorHighlight">@color/ripple_color</item>
+        <item name="android:colorControlActivated">@color/red_four</item>
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <item name="android:windowBackground">@drawable/bg_splash_night</item>
         <item name="navigationViewStyle">@style/CustomNavigationView</item>
@@ -29,5 +32,10 @@
 
     <style name="AppNavigationViewStyle" parent="Widget.Design.NavigationView">
         <item name="android:background">@color/bg_card</item>
+    </style>
+    <!-- Base application theme. -->
+    <style name="Base.Theme.DictionaryWithCoroutines" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your dark theme here. -->
+        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
     </style>
 </resources>

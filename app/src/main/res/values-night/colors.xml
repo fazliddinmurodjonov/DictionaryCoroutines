@@ -2,7 +2,7 @@
 <resources>
     <color name="bg_color">#FBFBFB</color>
     <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <color name="white">#FFFFFF</color>
     <color name="selected_item">#BF1323</color>
     <color name="unselected_item">#A5A4AC</color>
     <color name="red_one">#C61D3E</color>
@@ -13,7 +13,7 @@
     <color name="gray">#9C9394</color>
     <color name="dark_gray">#999999</color>
     <color name="light_yellow">#E6CEAC</color>
-    <color name="light_brow">#F8F1E7</color>
+    <color name="light_brown">#F8F1E7</color>
     <color name="brown">#C5A691</color>
     <color name="black_60">#9914192D</color>
     <color name="tv_color">#14192D</color>
@@ -22,6 +22,8 @@
     <color name="bg_card">@color/white</color>
     <color name="icon">#14192D</color>
     <color name="bg_splash">#FFFFFF</color>
+    <color name="white_25">#40FFFFFF</color>
     <color name="white_70">#B3FFFFFF</color>
     <color name="ripple_color">#33BF1323</color>
+    <color name="ripple_black">#3314192D</color>
 </resources>

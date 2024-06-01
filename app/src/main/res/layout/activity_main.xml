@@ -16,20 +16,20 @@
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"
-        app:itemRippleColor="@null"
-        app:subheaderColor="@null"
+        style="@style/AppNavigationViewStyle"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        style="@style/AppNavigationViewStyle"
         android:background="@color/bg_card"
         android:overScrollMode="never"
-        app:itemIconTint="@color/tv_color"
         app:headerLayout="@layout/nav_header_main"
+        app:itemIconTint="@color/tv_color"
+        app:itemRippleColor="@color/ripple_color"
         app:itemShapeFillColor="@color/bg_card"
         app:itemTextAppearance="@style/NavigationTextStyle"
         app:itemTextAppearanceActiveBoldEnabled="true"
         app:itemTextColor="@color/tv_color"
-        app:menu="@menu/activity_main_drawer" />
+        app:menu="@menu/activity_main_drawer"
+        app:subheaderColor="@null" />
 
 </androidx.drawerlayout.widget.DrawerLayout>

@@ -9,10 +9,11 @@
     android:orientation="vertical">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:weightSum="3">
 
         <TextView
             android:id="@+id/ordinalNumber"
@@ -21,6 +22,7 @@
             android:layout_gravity="center"
             android:layout_marginStart="15dp"
             android:layout_marginEnd="15dp"
+            android:layout_weight="0"
             android:fontFamily="@font/roboto_slab"
             android:text="@string/ordinal_number"
             android:textColor="@color/tv_color"
@@ -28,10 +30,11 @@
             android:textStyle="bold" />
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginEnd="15dp"
+            android:layout_weight="3"
             android:gravity="center"
             android:orientation="vertical">
 
@@ -70,6 +73,21 @@
                 android:textColor="@color/black_60"
                 android:textSize="16sp" />
         </LinearLayout>
+
+        <ImageView
+            android:id="@+id/imgBookmark"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="top"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="15dp"
+            android:layout_weight="0"
+            android:clickable="true"
+            android:contentDescription="@null"
+            android:focusable="true"
+            android:scaleX="0.6"
+            android:scaleY="0.6"
+            android:src="@drawable/bookmark_fill" />
     </LinearLayout>
 
     <com.google.android.material.divider.MaterialDivider

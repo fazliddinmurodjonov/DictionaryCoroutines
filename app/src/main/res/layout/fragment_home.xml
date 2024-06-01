@@ -1,314 +1,318 @@
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nestedScrollView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/red_four"
     android:fillViewport="true"
     android:orientation="vertical"
+    android:overScrollMode="never"
     tools:context="com.brightfuture.fragments.HomeFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvFoundWords"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="25dp"
+            android:fontFamily="@font/roboto_slab"
+            android:gravity="center"
+            android:text="@string/found_words"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="56dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="15dp"
+            android:background="@drawable/bg_edit_text"
+            android:weightSum="1">
 
-            <TextView
-                android:id="@+id/tvFoundWords"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="25dp"
-                android:fontFamily="@font/roboto_slab"
-                android:gravity="center"
-                android:text="@string/found_words"
-                android:textColor="@color/white"
-                android:textSize="16sp" />
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="15dp"
-                android:paddingStart="15dp"
-                android:paddingEnd="15dp">
-
-                <EditText
-                    android:id="@+id/etSearchWord"
-                    android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:layout_gravity="center"
-                    android:autofillHints=""
-                    android:background="@drawable/bg_edit_text"
-                    android:drawableStart="@drawable/search_edit_text"
-                    android:drawablePadding="10dp"
-                    android:fontFamily="@font/roboto_slab"
-                    android:gravity="start|center"
-                    android:hint="@string/search"
-                    android:inputType="text"
-                    android:maxLines="1"
-                    android:paddingStart="10dp"
-                    android:paddingEnd="25dp"
-                    android:textColor="@color/black"
-                    android:textColorHint="@color/gray"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    app:layout_constraintBottom_toBottomOf="@id/etSearchWord"
-                    app:layout_constraintEnd_toEndOf="@id/etSearchWord"
-                    app:layout_constraintHorizontal_bias="1.0"
-                    app:layout_constraintStart_toStartOf="@id/etSearchWord"
-                    app:layout_constraintTop_toTopOf="@id/etSearchWord">
-
-                    <com.google.android.material.card.MaterialCardView
-                        android:id="@+id/cvMicrophoneOfSearch"
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
-                        android:layout_gravity="center"
-                        android:layout_marginEnd="-15dp"
-                        android:clickable="true"
-                        android:focusable="true"
-                        app:cardBackgroundColor="@android:color/transparent"
-                        app:cardCornerRadius="50dp"
-                        app:rippleColor="@color/ripple_color"
-                        app:strokeWidth="0dp">
-
-                        <ImageView
-                            android:id="@+id/imageMicrophoneOfSearch"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_gravity="center"
-                            android:contentDescription="@null"
-                            android:scaleX="0.6"
-                            android:scaleY="0.6"
-                            android:src="@drawable/microphone" />
-                    </com.google.android.material.card.MaterialCardView>
-
-
-                    <com.google.android.material.card.MaterialCardView
-                        android:id="@+id/cvCopyOfSearch"
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
-                        android:layout_gravity="center"
-                        android:clickable="true"
-                        android:focusable="true"
-                        app:cardBackgroundColor="@android:color/transparent"
-                        app:cardCornerRadius="50dp"
-                        app:rippleColor="@color/ripple_color"
-                        app:strokeWidth="0dp">
-
-                        <ImageView
-                            android:id="@+id/imgCopyOfSearch"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_gravity="center"
-                            android:contentDescription="@null"
-                            android:scaleX="0.6"
-                            android:scaleY="0.6"
-                            android:src="@drawable/copy_search" />
-                    </com.google.android.material.card.MaterialCardView>
-
-                </LinearLayout>
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_gravity="center"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="15dp"
-                android:layout_marginEnd="15dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/tvWordOfTheDay"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:fontFamily="@font/roboto_slab"
-                    android:gravity="start"
-                    android:text="@string/word_of_the_day"
-                    android:textColor="@color/white" />
-
-                <TextView
-                    android:id="@+id/tvAllWords"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:fontFamily="@font/roboto_slab"
-                    android:gravity="end"
-                    android:text="@string/all_words"
-                    android:textColor="@color/white_70" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/wordLayout"
-                android:layout_width="match_parent"
+            <AutoCompleteTextView
+                android:id="@+id/autoCompleteText"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:background="@drawable/bg_word_layout"
-                android:orientation="vertical">
+                android:layout_weight="1"
+                android:background="@color/white"
+                android:completionThreshold="1"
+                android:drawableStart="@drawable/search_edit_text"
+                android:drawablePadding="10dp"
+    android:layout_marginStart="10dp"
+                android:gravity="start|center"
+                android:hint="@string/search"
+                android:inputType="text"
+                android:maxLines="1"
+                android:padding="6dp"
+                android:paddingStart="0dp"
+                android:paddingEnd="25dp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/gray"
+                android:textSize="16sp" />
 
-                <LinearLayout
-                    android:id="@+id/wordOfTheDayLayout"
-                    android:layout_width="match_parent"
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="0"
+                android:orientation="horizontal">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cvMicrophoneOfSearch"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
                     android:layout_gravity="center"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
+                    android:layout_marginEnd="-15dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:cardBackgroundColor="@android:color/transparent"
+                    app:cardCornerRadius="50dp"
+                    app:rippleColor="@color/ripple_color"
+                    app:strokeWidth="0dp">
 
-                    <com.google.android.material.card.MaterialCardView
-                        android:id="@+id/cvWord"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        app:cardBackgroundColor="@color/light_brow"
-                        app:cardCornerRadius="25dp"
-                        app:cardElevation="0.1dp"
-                        app:cardMaxElevation="1dp"
-                        app:cardPreventCornerOverlap="true"
-                        app:strokeWidth="0dp">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:id="@+id/tvWord"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:layout_marginTop="25dp"
-                                android:layout_marginBottom="10dp"
-                                android:fontFamily="@font/roboto_slab"
-                                android:gravity="center"
-                                android:text="@string/bookmark"
-                                android:textColor="@color/tv_color"
-                                android:textSize="22sp" />
-
-                            <ImageView
-                                android:layout_width="match_parent"
-                                android:layout_height="48dp"
-                                android:layout_gravity="center"
-                                android:contentDescription="@null"
-                                android:scaleX="0.7"
-                                android:scaleY="0.7"
-                                android:src="@drawable/refresh" />
-
-                            <androidx.constraintlayout.widget.ConstraintLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:layout_marginStart="45dp"
-                                android:layout_marginTop="15dp"
-                                android:layout_marginEnd="45dp"
-                                android:layout_marginBottom="35dp">
-
-                                <include
-                                    android:id="@+id/copyLayout"
-                                    layout="@layout/item_word_management_function"
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginEnd="5dp"
-                                    app:layout_constraintBottom_toBottomOf="parent"
-                                    app:layout_constraintEnd_toStartOf="@id/soundLayout"
-                                    app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toTopOf="parent" />
-
-                                <include
-                                    android:id="@+id/soundLayout"
-                                    layout="@layout/item_word_management_function"
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginStart="5dp"
-                                    android:layout_marginEnd="5dp"
-                                    app:layout_constraintBottom_toBottomOf="parent"
-                                    app:layout_constraintEnd_toStartOf="@id/saveLayout"
-                                    app:layout_constraintStart_toEndOf="@id/copyLayout"
-                                    app:layout_constraintTop_toTopOf="parent" />
-
-                                <include
-                                    android:id="@+id/saveLayout"
-                                    layout="@layout/item_word_management_function"
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginStart="5dp"
-                                    android:layout_marginEnd="5dp"
-                                    app:layout_constraintBottom_toBottomOf="parent"
-                                    app:layout_constraintEnd_toStartOf="@id/shareLayout"
-                                    app:layout_constraintStart_toEndOf="@id/soundLayout"
-                                    app:layout_constraintTop_toTopOf="parent" />
-
-                                <include
-                                    android:id="@+id/shareLayout"
-                                    layout="@layout/item_word_management_function"
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginStart="5dp"
-                                    app:layout_constraintBottom_toBottomOf="parent"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintStart_toEndOf="@id/saveLayout"
-                                    app:layout_constraintTop_toTopOf="parent" />
-
-                            </androidx.constraintlayout.widget.ConstraintLayout>
-
-                        </LinearLayout>
-
-                    </com.google.android.material.card.MaterialCardView>
-                    <LinearLayout
+                    <ImageView
+                        android:id="@+id/imageMicrophoneOfSearch"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
-                        android:layout_marginStart="15dp"
-                        android:layout_marginTop="25dp"
-                        android:layout_marginEnd="15dp"
-                        android:layout_marginBottom="15dp"
+                        android:contentDescription="@null"
+                        android:scaleX="0.6"
+                        android:scaleY="0.6"
+                        android:src="@drawable/microphone" />
+                </com.google.android.material.card.MaterialCardView>
+
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cvCopyOfSearch"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_gravity="center"
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:cardBackgroundColor="@android:color/transparent"
+                    app:cardCornerRadius="50dp"
+                    app:rippleColor="@color/ripple_color"
+                    app:strokeWidth="0dp">
+
+                    <ImageView
+                        android:id="@+id/imgCopyOfSearch"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:contentDescription="@null"
+                        android:scaleX="0.6"
+                        android:scaleY="0.6"
+                        android:src="@drawable/copy_search" />
+                </com.google.android.material.card.MaterialCardView>
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="15dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tvWordOfTheDay"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:fontFamily="@font/roboto_slab"
+                android:gravity="start|center"
+                android:text="@string/word_of_the_day"
+                android:textColor="@color/white" />
+
+            <TextView
+                android:id="@+id/tvAllWords"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:fontFamily="@font/roboto_slab"
+                android:gravity="end|center"
+                android:text="@string/all_words"
+                android:textColor="@color/white_70" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/wordLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:background="@drawable/bg_word_layout"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/wordOfTheDayLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:orientation="vertical">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cvWord"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    app:cardBackgroundColor="@color/light_brown"
+                    app:cardCornerRadius="25dp"
+                    app:cardElevation="0.1dp"
+                    app:cardMaxElevation="1dp"
+                    app:cardPreventCornerOverlap="true"
+                    app:strokeWidth="0dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:orientation="vertical">
 
                         <TextView
-                            android:id="@+id/wordDefinition"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:fontFamily="@font/roboto_slab"
-                            android:lineSpacingExtra="2dp"
-                            android:text="@string/word_definition"
-                            android:textColor="@color/tv_color"
-                            android:textSize="18sp" />
-
-                        <TextView
-                            android:id="@+id/wordExample"
+                            android:id="@+id/tvWord"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:layout_marginTop="25dp"
+                            android:layout_marginBottom="10dp"
                             android:fontFamily="@font/roboto_slab"
-                            android:lineSpacingExtra="2dp"
-                            android:text="@string/word_example"
-                            android:textColor="@color/black_60"
-                            android:textSize="18sp" />
+                            android:gravity="center"
+                            android:text="@string/bookmark"
+                            android:textColor="@color/tv_color"
+                            android:textSize="22sp" />
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="48dp"
+                            android:layout_gravity="center"
+                            android:contentDescription="@null"
+                            android:scaleX="0.7"
+                            android:scaleY="0.7"
+                            android:src="@drawable/refresh" />
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginStart="45dp"
+                            android:layout_marginTop="15dp"
+                            android:layout_marginEnd="45dp"
+                            android:layout_marginBottom="35dp">
+
+                            <include
+                                android:id="@+id/copyLayout"
+                                layout="@layout/item_word_management_function"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="5dp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toStartOf="@id/soundLayout"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <include
+                                android:id="@+id/soundLayout"
+                                layout="@layout/item_word_management_function"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="5dp"
+                                android:layout_marginEnd="5dp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toStartOf="@id/saveLayout"
+                                app:layout_constraintStart_toEndOf="@id/copyLayout"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <include
+                                android:id="@+id/saveLayout"
+                                layout="@layout/item_word_management_function"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="5dp"
+                                android:layout_marginEnd="5dp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toStartOf="@id/shareLayout"
+                                app:layout_constraintStart_toEndOf="@id/soundLayout"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <include
+                                android:id="@+id/shareLayout"
+                                layout="@layout/item_word_management_function"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="5dp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toEndOf="@id/saveLayout"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
 
                     </LinearLayout>
-                </LinearLayout>
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rvAllWords"
+                </com.google.android.material.card.MaterialCardView>
+
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:visibility="gone"
-                    android:orientation="vertical"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    tools:listitem="@layout/item_word" />
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="25dp"
+                    android:layout_marginEnd="15dp"
+
+                    android:layout_marginBottom="15dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/wordDefinition"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:fontFamily="@font/roboto_slab"
+                        android:lineSpacingExtra="2dp"
+                        android:text="@string/word_definition"
+                        android:textColor="@color/tv_color"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/wordExample"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="25dp"
+                        android:fontFamily="@font/roboto_slab"
+                        android:lineSpacingExtra="2dp"
+                        android:text="@string/word_example"
+                        android:textColor="@color/black_60"
+                        android:textSize="18sp" />
+
+                </LinearLayout>
             </LinearLayout>
 
-
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvAllWords"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="15dp"
+                android:nestedScrollingEnabled="true"
+                android:orientation="vertical"
+                android:visibility="gone"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/item_word" />
         </LinearLayout>
+
+
+    </LinearLayout>
 
 </androidx.core.widget.NestedScrollView>

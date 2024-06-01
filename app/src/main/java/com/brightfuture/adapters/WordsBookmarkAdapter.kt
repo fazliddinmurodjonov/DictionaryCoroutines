@@ -9,9 +9,10 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.brightfuture.dictionary.databinding.ItemWordBinding
+import com.brightfuture.dictionary.databinding.ItemWordBookmarkBinding
 import com.brightfuture.room.entity.Word
 
-class WordsAdapter() : ListAdapter<Word, WordsAdapter.ViewHolder>(MyDiffUtil()) {
+class WordsBookmarkAdapter() : ListAdapter<Word, WordsBookmarkAdapter.ViewHolder>(MyDiffUtil()) {
     lateinit var itemClick: OnItemClickListener
     private var wordList: MutableList<Word> = mutableListOf()
 
@@ -24,7 +25,7 @@ class WordsAdapter() : ListAdapter<Word, WordsAdapter.ViewHolder>(MyDiffUtil()) 
     }
 
 
-    inner class ViewHolder(private var binding: ItemWordBinding) :
+    inner class ViewHolder(private var binding: ItemWordBookmarkBinding) :
         RecyclerView.ViewHolder(binding.root) {
         @SuppressLint("ResourceAsColor")
         fun onBind(word: Word,position: Int) {
@@ -45,7 +46,7 @@ class WordsAdapter() : ListAdapter<Word, WordsAdapter.ViewHolder>(MyDiffUtil()) 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
-            ItemWordBinding.inflate(
+            ItemWordBookmarkBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false

@@ -15,7 +15,7 @@
             android:title="@string/search" />
         <item
             android:id="@+id/nav_bookmark"
-            android:icon="@drawable/bookmark"
+            android:icon="@drawable/nav_bookmark"
             android:textAppearance="@style/NavigationTextStyle"
             android:title="@string/bookmark" />
         <item
@@ -25,7 +25,7 @@
             android:title="@string/history" />
         <item
             android:id="@+id/nav_share"
-            android:icon="@drawable/share"
+            android:icon="@drawable/nav_share"
             android:textAppearance="@style/NavigationTextStyle"
             android:title="@string/share" />
         <item
