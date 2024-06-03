@@ -3,12 +3,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
-    android:background="@color/red_two"
     android:gravity="center"
     android:orientation="vertical"
     tools:context="com.brightfuture.fragments.WelcomePagerFragment">
 
     <LinearLayout
+        android:layout_marginTop="15dp"
         android:id="@+id/infoLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -36,7 +36,7 @@
             android:layout_height="8dp"
             android:layout_gravity="center"
             android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="25dp"
             android:max="100"
             android:progress="50"
             android:progressDrawable="@drawable/progress_bar_progress"

@@ -30,11 +30,11 @@ class WelcomePagerFragment : Fragment(R.layout.fragment_welcome_pager) {
             }
 
             2 -> {
-                binding.tvPager.text = resources.getString(R.string.pager_1)
+                binding.tvPager.text = resources.getString(R.string.pager_2)
             }
 
             3 -> {
-                binding.tvPager.text = resources.getString(R.string.pager_1)
+                binding.tvPager.text = resources.getString(R.string.pager_3)
             }
 
             4 -> {
