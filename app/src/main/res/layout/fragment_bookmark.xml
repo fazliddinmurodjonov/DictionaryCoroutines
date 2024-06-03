@@ -15,5 +15,16 @@
         android:orientation="vertical"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:listitem="@layout/item_word_bookmark" />
+    <ImageView
+        android:id="@+id/imgEmpty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:adjustViewBounds="true"
+        android:contentDescription="@null"
+        android:scaleX="0.7"
+        android:scaleY="0.7"
+        android:src="@drawable/empty"
+        android:visibility="gone" />
 
 </LinearLayout>
