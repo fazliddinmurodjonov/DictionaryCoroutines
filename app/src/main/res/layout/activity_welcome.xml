@@ -8,21 +8,57 @@
     android:orientation="vertical"
     tools:context=".WelcomeActivity">
 
+    <LinearLayout
+        android:id="@+id/skipLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="5dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@font/roboto_slab"
+            android:gravity="center"
+            android:text="@string/skip"
+            android:textAllCaps="true"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:contentDescription="@null"
+            android:scaleX="0.6"
+            android:scaleY="0.6"
+            android:src="@drawable/right" />
+    </LinearLayout>
+
+
     <ImageView
         android:id="@+id/imageWelcome"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginStart="45dp"
+        android:layout_marginTop="90dp"
         android:layout_marginEnd="45dp"
         android:adjustViewBounds="true"
-        android:layout_marginTop="90dp"
+        android:contentDescription="@null"
         android:src="@drawable/welcome_image"
         app:layout_constraintBottom_toTopOf="@id/viewpagerLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:contentDescription="@null" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
         android:id="@+id/viewpagerLayout"
@@ -31,22 +67,30 @@
         android:layout_gravity="center"
         android:background="@drawable/bg_welcome_layout"
         android:orientation="vertical"
-        android:paddingBottom="?actionBarSize"
+        android:weightSum="5"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/imageWelcome">
 
         <androidx.viewpager2.widget.ViewPager2
-            android:id="@+id/viewPager"
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center" />
-
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tabLayout"
+            android:id="@+id/welcomeViewPager"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_weight="5"
+            android:orientation="horizontal"
+            android:overScrollMode="never" />
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/welcomeTabLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="0"
+            android:clickable="false"
+            app:tabRippleColor="@android:color/transparent"
+            android:focusable="false"
             android:background="@android:color/transparent"
             android:elevation="0dp"
             app:tabBackground="@drawable/indicator_selector"
