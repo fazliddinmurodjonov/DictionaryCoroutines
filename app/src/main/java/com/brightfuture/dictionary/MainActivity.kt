@@ -2,13 +2,9 @@ package com.brightfuture.dictionary
 
 import android.content.Context
 import android.content.res.Configuration
-import android.graphics.Typeface
-import android.os.Build
 import android.os.Bundle
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
@@ -19,12 +15,9 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.brightfuture.dictionary.databinding.ActivityMainBinding
-import com.brightfuture.utils.CustomValues
+import com.brightfuture.utils.Functions
 import com.brightfuture.utils.CustomizeViews
 import com.google.android.material.navigation.NavigationView
-import java.io.File
-import java.io.FileOutputStream
-import java.net.URL
 
 
 class MainActivity : AppCompatActivity() {
@@ -56,7 +49,7 @@ class MainActivity : AppCompatActivity() {
         navView.itemIconTintList = null
         bottomNavigationView.itemIconTintList = null
         appBarConfiguration = AppBarConfiguration(
-            CustomValues.navigationFragmentList,
+            Functions.navigationFragmentList,
             binding.drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)

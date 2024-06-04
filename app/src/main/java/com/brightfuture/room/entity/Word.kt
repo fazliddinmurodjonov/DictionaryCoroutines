@@ -6,13 +6,13 @@ import androidx.room.PrimaryKey
 
 @Entity
 class Word(
-    @PrimaryKey(autoGenerate = true) val id: Long = 0,
-    val name: String? = "",
-    val phonetic: String? = "",
-    val audioLink: String? = "",
-    val definition: String? = "",
-    val example: String? = "",
-    val searched: Int? = 0,
-    val bookmark: Int = 0,
-    val seen: Int? = 0,
+    @PrimaryKey(autoGenerate = true) var id: Long = 0,
+    var name: String = "",
+    var phonetic: String = "",
+    var audioLink: String = "",
+    var definition: String = "",
+    var example: String = "",
+    var searched: Int = 0,
+    var bookmark: Int = 0,
+    var seen: Int = 0,
 )

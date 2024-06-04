@@ -1,12 +1,9 @@
 package com.brightfuture.fragments
 
-import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver.OnGlobalLayoutListener
-import android.widget.AdapterView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -15,12 +12,10 @@ import com.brightfuture.dictionary.R
 import com.brightfuture.dictionary.databinding.FragmentHomeBinding
 import com.brightfuture.room.entity.Word
 import com.brightfuture.utils.CustomizeViews.pixelToDp
-import com.brightfuture.viewmodels.ConnectionLiveData
 
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
     private val binding: FragmentHomeBinding by viewBinding()
-    private lateinit var internetConnectivityManager: ConnectionLiveData
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -67,10 +62,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         }
         wordsAdapter.submitList(wordsList)
         binding.rvAllWords.adapter = wordsAdapter
-        internetConnectivityManager = ConnectionLiveData(requireActivity().application)
-        internetConnectivityManager.observe(requireActivity()) { isConnected ->
-            //   networkConnected = isConnected
-        }
+
         binding.autoCompleteText.isSingleLine = true
 
 

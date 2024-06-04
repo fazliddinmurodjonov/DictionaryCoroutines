@@ -4,31 +4,37 @@ import android.content.Context
 import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.brightfuture.adapters.WelcomePagerAdapter
-import com.brightfuture.dictionary.databinding.ActivityMainBinding
 import com.brightfuture.dictionary.databinding.ActivityWelcomeBinding
+import com.brightfuture.utils.Functions
 import com.brightfuture.utils.CustomizeViews
 import com.google.android.material.tabs.TabLayoutMediator
 
+
 class WelcomeActivity : AppCompatActivity() {
     private lateinit var binding: ActivityWelcomeBinding
+    private lateinit var welcomePagerAdapter: WelcomePagerAdapter
+    var page = -1
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         createUI()
     }
 
     private fun createUI() {
+        Functions.connectivityManager(this)
         screen()
-        val welcomePagerAdapter = WelcomePagerAdapter(4, this)
+        setAdapter()
+        clicks()
+    }
+
+    private fun setAdapter() {
+        welcomePagerAdapter = WelcomePagerAdapter(4, this)
+        binding.welcomeViewPager.offscreenPageLimit = 1
         binding.welcomeViewPager.adapter = welcomePagerAdapter
         TabLayoutMediator(binding.welcomeTabLayout, binding.welcomeViewPager) { tab, position ->
         }.attach()
@@ -37,29 +43,24 @@ class WelcomeActivity : AppCompatActivity() {
             orientation = ViewPager2.ORIENTATION_HORIZONTAL
             (getChildAt(0) as RecyclerView).overScrollMode = RecyclerView.OVER_SCROLL_NEVER
         }
-        binding.welcomeViewPager.offscreenPageLimit = 1
         val myPageChangeCallback = object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
-            //    binding.calendarMonthTv.text = Functions.getMonthName(position)
-            //    currentPosition = position
-            //    Toast.makeText(this@WelcomeActivity, position.toString(), Toast.LENGTH_SHORT).show()
+                Log.d("onPageSelected", "position: $position")
+                page = position
+                if (position == 3) {
+                    binding.welcomeViewPager.isUserInputEnabled = false
+                }
             }
         }
-      //  binding.welcomeViewPager.isUserInputEnabled = false
-
         binding.welcomeViewPager.registerOnPageChangeCallback(myPageChangeCallback)
-//        val size = binding.welcomeTabLayout.tabCount
-//        for (i in 0 until size) {
-//            val item =
-//                Indicat.inflate(
-//                    LayoutInflater.from(requireActivity()),
-//                    null,
-//                    false
-//                )
-//            val tabAt = binding.alphabetTL.getTabAt(i)
-//            tabAt?.customView = item.root
-//            item.letter.text = alphabet[i]
-//        }
+    }
+
+    private fun clicks() {
+        binding.skipLayout.setOnClickListener {
+            if (page != 3) {
+                binding.welcomeViewPager.setCurrentItem(3, true)
+            }
+        }
     }
 
     private fun screen() {
@@ -73,6 +74,7 @@ class WelcomeActivity : AppCompatActivity() {
         CustomizeViews.appearanceStatusNavigationBars(window, 1)
         CustomizeViews.statusNavigationBarsColor(window, this, R.color.red_four, R.color.red_two)
     }
+
     override fun attachBaseContext(newBase: Context?) {
         val newOverride = Configuration(newBase?.resources?.configuration)
         newOverride.fontScale = 1.0f

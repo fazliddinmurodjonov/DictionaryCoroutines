@@ -44,7 +44,7 @@
     </LinearLayout>
 
     <include
-        android:id="@+id/retryLayout"
+        android:id="@+id/retryConnectionLayout"
         layout="@layout/retry_connection_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
