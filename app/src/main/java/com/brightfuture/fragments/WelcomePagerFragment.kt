@@ -30,14 +30,10 @@ class WelcomePagerFragment : Fragment(R.layout.fragment_welcome_pager) {
         super.onViewCreated(view, savedInstanceState)
         createUI()
         clicks()
-        Log.d("networkConnectionViewModellll", "page :$page ")
-
         networkConnectionViewModel = NetworkConnectionViewModel(requireActivity().application)
         networkConnectionViewModel.observe(viewLifecycleOwner) { isConnect ->
-            Log.d("networkConnectionViewModel", "isConnect:$isConnect ")
             if (page == 4) {
                 Log.d("networkConnectionViewModellll", "isConnect:$isConnect ")
-                Log.d("networkConnectionViewModellll", "page :$page ")
                 if (isConnect) {
                 //    loadData()
                   //  alertDialog.dismiss()
@@ -81,8 +77,6 @@ class WelcomePagerFragment : Fragment(R.layout.fragment_welcome_pager) {
     }
     private fun clicks() {
 
-
-
     }
 
     companion object {
@@ -93,5 +87,13 @@ class WelcomePagerFragment : Fragment(R.layout.fragment_welcome_pager) {
                     putInt(PAGE, page)
                 }
             }
+    }
+
+    override fun setMenuVisibility(menuVisible: Boolean) {
+        super.setMenuVisibility(menuVisible)
+        if (page==4 && menuVisible)
+        {
+            Log.d("networkConnectionViewModellll", "page: ${page} menuVisible:$menuVisible ")
+        }
     }
 }

@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.recyclerview.widget.RecyclerView
@@ -20,6 +19,8 @@ class WelcomeActivity : AppCompatActivity() {
     private lateinit var binding: ActivityWelcomeBinding
     private lateinit var welcomePagerAdapter: WelcomePagerAdapter
     var page = -1
+    private lateinit var viewPager: ViewPager2
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         createUI()
@@ -32,13 +33,15 @@ class WelcomeActivity : AppCompatActivity() {
         clicks()
     }
     private fun setAdapter() {
+        viewPager = findViewById(R.id.welcomeViewPager)
         welcomePagerAdapter = WelcomePagerAdapter(4, this)
-        binding.welcomeViewPager.adapter = welcomePagerAdapter
-        binding.welcomeViewPager.offscreenPageLimit = 1
-        TabLayoutMediator(binding.welcomeTabLayout, binding.welcomeViewPager) { tab, position ->
+        viewPager.offscreenPageLimit = 1
+        viewPager.adapter = welcomePagerAdapter
+        TabLayoutMediator(binding.welcomeTabLayout, viewPager) { tab, position ->
         }.attach()
 
-        binding.welcomeViewPager.apply {
+
+        viewPager.apply {
             adapter = welcomePagerAdapter
             orientation = ViewPager2.ORIENTATION_HORIZONTAL
             (getChildAt(0) as RecyclerView).overScrollMode = RecyclerView.OVER_SCROLL_NEVER
@@ -46,10 +49,9 @@ class WelcomeActivity : AppCompatActivity() {
 
         val myPageChangeCallback = object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
-                Log.d("onPageSelected", "position: $position")
                 page = position
                 if (position == 3) {
-                    binding.welcomeViewPager.isUserInputEnabled = false
+                    viewPager.isUserInputEnabled = false
                 }
             }
 
@@ -57,7 +59,7 @@ class WelcomeActivity : AppCompatActivity() {
                 super.onPageScrollStateChanged(state)
             }
         }
-        binding.welcomeViewPager.registerOnPageChangeCallback(myPageChangeCallback)
+        viewPager.registerOnPageChangeCallback(myPageChangeCallback)
     }
 
     private fun clicks() {
