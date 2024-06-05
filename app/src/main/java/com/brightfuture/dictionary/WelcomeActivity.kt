@@ -11,8 +11,8 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.brightfuture.adapters.WelcomePagerAdapter
 import com.brightfuture.dictionary.databinding.ActivityWelcomeBinding
-import com.brightfuture.utils.Functions
 import com.brightfuture.utils.CustomizeViews
+import com.brightfuture.utils.Functions
 import com.google.android.material.tabs.TabLayoutMediator
 
 
@@ -31,18 +31,19 @@ class WelcomeActivity : AppCompatActivity() {
         setAdapter()
         clicks()
     }
-
     private fun setAdapter() {
         welcomePagerAdapter = WelcomePagerAdapter(4, this)
-        binding.welcomeViewPager.offscreenPageLimit = 1
         binding.welcomeViewPager.adapter = welcomePagerAdapter
+        binding.welcomeViewPager.offscreenPageLimit = 1
         TabLayoutMediator(binding.welcomeTabLayout, binding.welcomeViewPager) { tab, position ->
         }.attach()
+
         binding.welcomeViewPager.apply {
             adapter = welcomePagerAdapter
             orientation = ViewPager2.ORIENTATION_HORIZONTAL
             (getChildAt(0) as RecyclerView).overScrollMode = RecyclerView.OVER_SCROLL_NEVER
         }
+
         val myPageChangeCallback = object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 Log.d("onPageSelected", "position: $position")
@@ -50,6 +51,10 @@ class WelcomeActivity : AppCompatActivity() {
                 if (position == 3) {
                     binding.welcomeViewPager.isUserInputEnabled = false
                 }
+            }
+
+            override fun onPageScrollStateChanged(state: Int) {
+                super.onPageScrollStateChanged(state)
             }
         }
         binding.welcomeViewPager.registerOnPageChangeCallback(myPageChangeCallback)
@@ -81,5 +86,4 @@ class WelcomeActivity : AppCompatActivity() {
         applyOverrideConfiguration(newOverride)
         super.attachBaseContext(newBase)
     }
-
 }

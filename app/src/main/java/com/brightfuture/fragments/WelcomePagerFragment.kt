@@ -30,11 +30,14 @@ class WelcomePagerFragment : Fragment(R.layout.fragment_welcome_pager) {
         super.onViewCreated(view, savedInstanceState)
         createUI()
         clicks()
+        Log.d("networkConnectionViewModellll", "page :$page ")
+
         networkConnectionViewModel = NetworkConnectionViewModel(requireActivity().application)
         networkConnectionViewModel.observe(viewLifecycleOwner) { isConnect ->
             Log.d("networkConnectionViewModel", "isConnect:$isConnect ")
             if (page == 4) {
                 Log.d("networkConnectionViewModellll", "isConnect:$isConnect ")
+                Log.d("networkConnectionViewModellll", "page :$page ")
                 if (isConnect) {
                 //    loadData()
                   //  alertDialog.dismiss()

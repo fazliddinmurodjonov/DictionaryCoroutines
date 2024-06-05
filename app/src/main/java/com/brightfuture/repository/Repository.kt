@@ -9,38 +9,29 @@ import java.io.IOException
 object Repository {
 
     suspend fun getWords(): Resource<Pair<Boolean, Boolean>> {
+        var count = 0
         return try {
             coroutineScope {
                 for (word in Functions.essentialWords) {
+                    ++count
                     val response = async {
                         Functions.service.getWord(
                             word
                         )
                     }.await()
                     if (response.isSuccessful) {
-                        Functions
-                        Resource.success(Pair(true, true))
+                        Functions.insertWord(response.body()!![0])
+                        Resource.success(Pair(true, false))
+                    } else {
+                        Resource.success(Pair(true, false))
                     }
                 }
-
-
-                if (response.isSuccessful) {
-
-                    //   Resource.success(Pair(locationData, response.body()!!.address.country_code))
-                    Resource.success(Pair(true, true))
-                } else {
-                    //Resource.error("Response code : ${response.code()}", Pair(locationData, ""))
-                    Resource.success(Pair(true, true))
-
-                }
+                Resource.success(Pair(true, true))
             }
         } catch (e: IOException) {
-            //   Resource.error("Network error: $e", Pair(locationData, ""))
-            Resource.success(Pair(true, true))
-
+            Resource.error("Network error: $e", Pair(false, false))
         } catch (e: Exception) {
-            //       Resource.error("Unexpected error: $e", Pair(locationData, ""))
-            Resource.success(Pair(true, true))
+            Resource.error("Unexpected error: $e", Pair(false, false))
         }
     }
 

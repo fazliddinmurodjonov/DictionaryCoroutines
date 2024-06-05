@@ -47,15 +47,17 @@ object Functions {
         }
         for (meaning in wordResponse.meanings) {
             for (definition in meaning.definitions) {
-                if (definition.definition !=null)
+                if (definition.definition != null && definition.definition.isNotEmpty() && definition.example != null) {
+                    word.definition = definition.definition
+                    word.example = definition.example
+                    break
+                }
             }
         }
-
-        word.searched  = 0
-        word.bookmark  = 0
-        word.seen  = 0
-
-
+        word.searched = 0
+        word.bookmark = 0
+        word.seen = 0
+        db.wordDao().insert(word)
     }
 
 
