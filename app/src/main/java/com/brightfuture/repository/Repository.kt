@@ -1,37 +1,30 @@
 package com.brightfuture.repository
 
+import android.util.Log
 import com.brightfuture.utils.Functions
 import com.brightfuture.utils.Resource
-import kotlinx.coroutines.async
-import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import java.io.IOException
 
 object Repository {
 
-    suspend fun getWords(): Resource<Pair<Boolean, Boolean>> {
-        var count = 0
-        return try {
-            coroutineScope {
-                for (word in Functions.essentialWords) {
-                    ++count
-                    val response = async {
-                        Functions.service.getWord(
-                            word
-                        )
-                    }.await()
-                    if (response.isSuccessful) {
-                        Functions.insertWord(response.body()!![0])
-                        Resource.success(Pair(true, false))
-                    } else {
-                        Resource.success(Pair(true, false))
-                    }
+    fun getWords(): Flow<Resource<Pair<Boolean, Boolean>>> = flow {
+        try {
+            for (word in Functions.essentialWords) {
+                val response = Functions.service.getWord(word)
+                if (response.isSuccessful) {
+                    Functions.insertWord(response.body()!![0])
+                    emit(Resource.success(Pair(true, false)))
+                } else {
+                    emit(Resource.success(Pair(true, false)))
                 }
-                Resource.success(Pair(true, true))
             }
+            emit(Resource.success(Pair(true, true)))
         } catch (e: IOException) {
-            Resource.error("Network error: $e", Pair(false, false))
+            emit(Resource.error("Network error: $e", Pair(false, false)))
         } catch (e: Exception) {
-            Resource.error("Unexpected error: $e", Pair(false, false))
+            emit(Resource.error("Unexpected error: $e", Pair(false, false)))
         }
     }
 

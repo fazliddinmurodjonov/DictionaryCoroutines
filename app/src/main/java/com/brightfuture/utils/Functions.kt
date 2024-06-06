@@ -10,7 +10,7 @@ import com.brightfuture.room.entity.Word
 
 object Functions {
     val essentialWords = listOf(
-        "the", "be", "to", "of", "and", "a", "in", "that", "have", "I",
+        "the", "be", "to", "of", "and", "easy", "in", "that", "have", "find",
         "it", "for", "not", "on", "with", "he", "as", "you", "do", "at",
         "this", "but", "his", "by", "from", "they", "we", "say", "her", "she",
         "or", "an", "will", "my", "one", "all", "would", "there", "their", "what",

@@ -1,6 +1,7 @@
 package com.brightfuture.dictionary
 
 import android.content.Context
+import android.content.Intent
 import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
@@ -12,6 +13,7 @@ import com.brightfuture.adapters.WelcomePagerAdapter
 import com.brightfuture.dictionary.databinding.ActivityWelcomeBinding
 import com.brightfuture.utils.CustomizeViews
 import com.brightfuture.utils.Functions
+import com.brightfuture.utils.SharedPreference
 import com.google.android.material.tabs.TabLayoutMediator
 
 
@@ -27,11 +29,13 @@ class WelcomeActivity : AppCompatActivity() {
     }
 
     private fun createUI() {
+        SharedPreference.init(this)
         Functions.connectivityManager(this)
         screen()
         setAdapter()
         clicks()
     }
+
     private fun setAdapter() {
         viewPager = findViewById(R.id.welcomeViewPager)
         welcomePagerAdapter = WelcomePagerAdapter(4, this)
@@ -71,15 +75,25 @@ class WelcomeActivity : AppCompatActivity() {
     }
 
     private fun screen() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            installSplashScreen()
+        if (SharedPreference.isWordsDownloaded) {
+            startActivity(Intent(this, MainActivity::class.java))
+            finish()
         } else {
-            setTheme(R.style.Theme_DictionaryWithCoroutines)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                installSplashScreen()
+            } else {
+                setTheme(R.style.Theme_DictionaryWithCoroutines)
+            }
+            binding = ActivityWelcomeBinding.inflate(layoutInflater)
+            setContentView(binding.root)
+            CustomizeViews.appearanceStatusNavigationBars(window, 1)
+            CustomizeViews.statusNavigationBarsColor(
+                window,
+                this,
+                R.color.red_four,
+                R.color.red_two
+            )
         }
-        binding = ActivityWelcomeBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        CustomizeViews.appearanceStatusNavigationBars(window, 1)
-        CustomizeViews.statusNavigationBarsColor(window, this, R.color.red_four, R.color.red_two)
     }
 
     override fun attachBaseContext(newBase: Context?) {

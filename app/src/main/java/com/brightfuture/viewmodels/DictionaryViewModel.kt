@@ -12,8 +12,11 @@ class DictionaryViewModel : ViewModel() {
 
     fun getWords(): LiveData<Resource<Pair<Boolean, Boolean>>> {
         val response = MutableLiveData<Resource<Pair<Boolean, Boolean>>>()
+        response.postValue(Resource.loading(null))
         viewModelScope.launch {
-            response.postValue(Repository.getWords())
+            Repository.getWords().collect {
+                response.postValue(it)
+            }
         }
         return response
     }

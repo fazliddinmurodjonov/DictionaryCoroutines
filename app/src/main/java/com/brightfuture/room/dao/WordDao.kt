@@ -30,6 +30,9 @@ interface WordDao {
     @Query("SELECT * FROM Word")
     fun getAllWords(): List<Word>
 
+    @Query("SELECT COUNT(*) FROM Word")
+    fun getCountOfWords(): Int
+
     @Query("SELECT * FROM Word WHERE searched = :searched")
     fun getAllSearchedWords(searched: Int): List<Word>
 
@@ -38,6 +41,7 @@ interface WordDao {
 
     @Query("SELECT * FROM Word WHERE bookmark = :bookmark")
     fun getAllBookmarkWordsFlowable(bookmark: Int): Flowable<List<Word>>
+
     @Query("SELECT * FROM Word WHERE seen = :seen")
     fun getAllSeenWords(seen: Int): List<Word>
 
