@@ -3,7 +3,10 @@ package com.brightfuture.fragments
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.media.MediaPlayer
+import android.net.Uri
 import android.os.Bundle
+import android.speech.tts.TextToSpeech
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver.OnGlobalLayoutListener
@@ -20,11 +23,14 @@ import com.brightfuture.utils.Functions
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.Locale
 
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
     private val binding: FragmentHomeBinding by viewBinding()
     var word = Word()
+    private lateinit var textToSpeech: TextToSpeech
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         createUI()
@@ -64,6 +70,11 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 Functions.db.wordDao().getCountOfWords()
             }
             binding.tvFoundWords.text = getString(R.string.found_words, wordCount)
+        }
+        textToSpeech = TextToSpeech(requireContext()) { status ->
+            if (status != TextToSpeech.ERROR) {
+                textToSpeech.language = Locale.UK
+            }
         }
     }
 
@@ -109,13 +120,43 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         binding.copyLayout.cvWordFunction.setOnClickListener {
             copyTextFromClipboard(word.name)
         }
-        binding.soundLayout.cvWordFunction.setOnClickListener { }
+        binding.soundLayout.cvWordFunction.setOnClickListener {
+            listenAudio()
+        }
         binding.bookmarkLayout.cvWordFunction.setOnClickListener {
             bookmarkWord()
         }
         binding.shareLayout.cvWordFunction.setOnClickListener {
             Functions.shareWord(word, requireContext())
         }
+    }
+
+    private fun listenAudio() {
+//        if (networkConnected) {
+//            val player = MediaPlayer.create(requireContext(),
+//                Uri.parse("https:${currentWord?.audio_link}"))
+//            if (player != null)
+//                player.start()
+//            else {
+//                tts.speak(currentWord?.word, TextToSpeech.QUEUE_FLUSH, null, "null")
+//            }
+//        } else {
+//            tts.speak(currentWord?.word, TextToSpeech.QUEUE_FLUSH, null, "null")
+//        }
+
+
+        val player = MediaPlayer.create(
+            requireContext(),
+            Uri.parse(word.audioLink)
+        )
+        if (player != null)
+            player.start()
+        else {
+            textToSpeech.speak(word.name, TextToSpeech.QUEUE_FLUSH, null, "null")
+        }
+
+        //  textToSpeech.speak(word.name, TextToSpeech.QUEUE_FLUSH, null, "null")
+
     }
 
     private fun bookmarkWord() {

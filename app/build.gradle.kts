@@ -97,7 +97,7 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation ("androidx.viewpager2:viewpager2:1.1.0")
     implementation ("androidx.fragment:fragment-ktx:1.7.1")
-
+    implementation ("com.karumi:dexter:6.2.3")
 
 
 

@@ -22,6 +22,10 @@ object SharedPreference {
         set(value) = sharedPreference.edit {
             it.putBoolean("isWordsDownloaded", value)
         }
-
+    var isWordsDownloaded: Boolean
+        get() = sharedPreference.getBoolean("isWordsDownloaded", false)
+        set(value) = sharedPreference.edit {
+            it.putBoolean("isWordsDownloaded", value)
+        }
 
 }

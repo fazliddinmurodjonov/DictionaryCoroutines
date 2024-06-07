@@ -1,5 +1,6 @@
 package com.brightfuture.utils
 
+import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.net.ConnectivityManager
@@ -9,6 +10,9 @@ import com.brightfuture.models.word_response.WordResponseItem
 import com.brightfuture.retrofit.ApiClient
 import com.brightfuture.room.database.WordDB
 import com.brightfuture.room.entity.Word
+import com.karumi.dexter.Dexter
+import com.karumi.dexter.listener.PermissionGrantedResponse
+import com.karumi.dexter.listener.single.PermissionListener
 
 object Functions {
     val essentialWords = listOf(
@@ -87,6 +91,33 @@ object Functions {
         }
         val shareIntent = Intent.createChooser(sendIntent, null)
         context.startActivity(shareIntent)
+    }
+
+    fun requestLocationPermissionAgain() {
+        Dexter.withContext(App.instance).withPermission(Manifest.permission.RECORD_AUDIO)
+            .withListener(object : PermissionListener {
+                override fun onPermissionGranted(response: PermissionGrantedResponse?) {
+                    SharedPreference.permissionLocationForDialog = -1
+                }
+
+                override fun onPermissionDenied(response: PermissionDeniedResponse?) {
+                    if (response!!.isPermanentlyDenied) {
+                        if (SharedPreference.permissionLocationForDialog == 1) {
+                            appDetailsSettings()
+                        }
+                        SharedPreference.permissionLocationForDialog = 1
+                    } else {
+                        SharedPreference.permissionLocationForDialog = 0
+                    }
+                }
+
+                override fun onPermissionRationaleShouldBeShown(
+                    permission: PermissionRequest?,
+                    token: PermissionToken?,
+                ) {
+                    token?.continuePermissionRequest()
+                }
+            }).check()
     }
 
 

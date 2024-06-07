@@ -19,12 +19,19 @@ class HistoryFragment : Fragment(R.layout.fragment_history) {
 
     private fun createUI() {
         val wordsHistoryList = Functions.db.wordDao().getAllSeenWords(1)
+        imageEmpty(wordsHistoryList.size)
         val wordsIdList = wordsHistoryList.map { it.id }
         wordsHistoryAdapter.submitList(wordsHistoryList)
         binding.rvWordsHistory.adapter = wordsHistoryAdapter
         binding.cvClearHistory.setOnClickListener {
             Functions.db.wordDao().updateSeenList(wordsIdList,0)
             binding.rvWordsHistory.adapter = null
+            imageEmpty(0)
         }
+    }
+
+    private fun imageEmpty(count: Int) {
+        binding.imgEmpty.visibility = if (count == 0) View.VISIBLE else View.GONE
+        binding.rvWordsHistory.visibility = if (count == 0) View.GONE else View.VISIBLE
     }
 }
