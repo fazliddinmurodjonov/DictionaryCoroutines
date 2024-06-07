@@ -6,15 +6,15 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.brightfuture.dictionary.databinding.ItemWordBinding
-import com.brightfuture.room.entity.Word
+import com.brightfuture.dictionary.databinding.ItemWordHistoryBinding
+import com.brightfuture.models.WordHistory
 
-class WordsAdapter() : ListAdapter<Word, WordsAdapter.ViewHolder>(MyDiffUtil()) {
-    private lateinit var itemClick: OnItemClickListener
-    private var wordList: MutableList<Word> = mutableListOf()
+class WordsHistoryAdapter() : ListAdapter<WordHistory, WordsHistoryAdapter.ViewHolder>(MyDiffUtil()) {
+    lateinit var itemClick: OnItemClickListener
+  //  private var wordList: MutableList<Word> = mutableListOf()
 
     fun interface OnItemClickListener {
-        fun onClick(id: Long)
+        fun onClick(id: Int)
     }
 
     fun setOnItemClickListener(listener: OnItemClickListener) {
@@ -22,31 +22,27 @@ class WordsAdapter() : ListAdapter<Word, WordsAdapter.ViewHolder>(MyDiffUtil()) 
     }
 
 
-    inner class ViewHolder(private var binding: ItemWordBinding) :
+    inner class ViewHolder(private var binding: ItemWordHistoryBinding) :
         RecyclerView.ViewHolder(binding.root) {
         @SuppressLint("ResourceAsColor")
-        fun onBind(word: Word, position: Int) {
-            binding.ordinalNumber.text = word.id.toString()
+        fun onBind(word: WordHistory, position: Int) {
             binding.tvWord.text = word.name
-            binding.tvWordDefinition.text = word.definition
-            binding.tvWordExample.text = word.example
-            binding.root.setOnClickListener {
-
-                // removeItem(bindingAdapterPosition)
-            }
+//            binding.root.setOnClickListener {
+//                removeItem(bindingAdapterPosition)
+//            }
         }
     }
 
-    fun removeItem(position: Int) {
-        if (position < wordList.size) {
-            wordList.removeAt(position)
-            submitList(wordList.toList())
-        }
-    }
+//    fun removeItem(position: Int) {
+//        if (position < wordList.size) {
+//            wordList.removeAt(position)
+//            submitList(wordList.toList())
+//        }
+//    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
-            ItemWordBinding.inflate(
+            ItemWordHistoryBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
@@ -58,10 +54,10 @@ class WordsAdapter() : ListAdapter<Word, WordsAdapter.ViewHolder>(MyDiffUtil()) 
         holder.onBind(getItem(position), position)
     }
 
-    class MyDiffUtil : DiffUtil.ItemCallback<Word>() {
+    class MyDiffUtil : DiffUtil.ItemCallback<WordHistory>() {
         override fun areItemsTheSame(
-            oldItem: Word,
-            newItem: Word,
+            oldItem: WordHistory,
+            newItem: WordHistory,
         ): Boolean {
             return oldItem.id == newItem.id
         }
@@ -69,8 +65,8 @@ class WordsAdapter() : ListAdapter<Word, WordsAdapter.ViewHolder>(MyDiffUtil()) 
 
         @SuppressLint("DiffUtilEquals")
         override fun areContentsTheSame(
-            oldItem: Word,
-            newItem: Word,
+            oldItem: WordHistory,
+            newItem: WordHistory,
         ): Boolean {
             return when {
                 oldItem.id != newItem.id -> {
@@ -83,8 +79,8 @@ class WordsAdapter() : ListAdapter<Word, WordsAdapter.ViewHolder>(MyDiffUtil()) 
 
     }
 
-    override fun submitList(list: List<Word>?) {
-        wordList = list?.toMutableList() ?: mutableListOf()
-        super.submitList(list)
-    }
+//    override fun submitList(list: List<WordHistory>?) {
+//        wordList = list?.toMutableList() ?: mutableListOf()
+//        super.submitList(list)
+//    }
 }

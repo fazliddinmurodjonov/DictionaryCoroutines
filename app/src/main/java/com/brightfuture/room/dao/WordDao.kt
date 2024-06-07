@@ -2,14 +2,16 @@ package com.brightfuture.room.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
+import com.brightfuture.models.WordHistory
 import com.brightfuture.room.entity.Word
 import io.reactivex.rxjava3.core.Flowable
 
 @Dao
 interface WordDao {
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(word: Word)
 
     @Update
@@ -20,6 +22,9 @@ interface WordDao {
 
     @Query("UPDATE Word SET seen = :seen WHERE id = :wordId")
     fun updateSeen(wordId: Long, seen: Int)
+
+    @Query("UPDATE Word SET seen = :seen WHERE id IN (:wordIds)")
+    fun updateSeenList(wordIds: List<Long>, seen: Int)
 
     @Query("SELECT EXISTS(SELECT * FROM Word)")
     fun isExists(): Boolean
@@ -42,8 +47,9 @@ interface WordDao {
     @Query("SELECT * FROM Word WHERE bookmark = :bookmark")
     fun getAllBookmarkWordsFlowable(bookmark: Int): Flowable<List<Word>>
 
-    @Query("SELECT * FROM Word WHERE seen = :seen")
-    fun getAllSeenWords(seen: Int): List<Word>
+    @Query("SELECT id,name FROM Word WHERE seen = :seen")
+    fun getAllSeenWords(seen: Int): List<WordHistory>
+
 
     @Query("SELECT * FROM word ORDER BY RANDOM() LIMIT 1")
     fun getRandomWord(): Word

@@ -42,19 +42,19 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
+                android:layout_marginStart="10dp"
                 android:layout_weight="1"
                 android:background="@color/white"
                 android:completionThreshold="1"
                 android:drawableStart="@drawable/search_edit_text"
                 android:drawablePadding="10dp"
-    android:layout_marginStart="10dp"
                 android:gravity="start|center"
                 android:hint="@string/search"
                 android:inputType="text"
                 android:maxLines="1"
                 android:padding="6dp"
                 android:paddingStart="0dp"
-                android:paddingEnd="25dp"
+                android:paddingEnd="15dp"
                 android:textColor="@color/black"
                 android:textColorHint="@color/gray"
                 android:textSize="16sp" />
@@ -193,10 +193,13 @@
                             android:textSize="22sp" />
 
                         <ImageView
+                            android:id="@+id/imgRandomWord"
                             android:layout_width="match_parent"
                             android:layout_height="48dp"
                             android:layout_gravity="center"
+                            android:clickable="true"
                             android:contentDescription="@null"
+                            android:focusable="true"
                             android:scaleX="0.7"
                             android:scaleY="0.7"
                             android:src="@drawable/refresh" />
@@ -229,12 +232,12 @@
                                 android:layout_marginStart="5dp"
                                 android:layout_marginEnd="5dp"
                                 app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintEnd_toStartOf="@id/saveLayout"
+                                app:layout_constraintEnd_toStartOf="@id/bookmarkLayout"
                                 app:layout_constraintStart_toEndOf="@id/copyLayout"
                                 app:layout_constraintTop_toTopOf="parent" />
 
                             <include
-                                android:id="@+id/saveLayout"
+                                android:id="@+id/bookmarkLayout"
                                 layout="@layout/item_word_management_function"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
@@ -253,7 +256,7 @@
                                 android:layout_marginStart="5dp"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintStart_toEndOf="@id/saveLayout"
+                                app:layout_constraintStart_toEndOf="@id/bookmarkLayout"
                                 app:layout_constraintTop_toTopOf="parent" />
 
                         </androidx.constraintlayout.widget.ConstraintLayout>

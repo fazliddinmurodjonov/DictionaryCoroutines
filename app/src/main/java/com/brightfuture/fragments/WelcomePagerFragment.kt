@@ -60,11 +60,8 @@ class WelcomePagerFragment : Fragment(R.layout.fragment_welcome_pager) {
         networkConnectionViewModel = NetworkConnectionViewModel(requireActivity().application)
         var count = 0
         wordsObserver = Observer {
-            Log.d("wordsObserver", "viewModelAndObservers: ${it.status} ")
-
             when (it.status) {
                 Status.LOADING -> {
-
                 }
 
                 Status.SUCCESS -> {
@@ -78,6 +75,10 @@ class WelcomePagerFragment : Fragment(R.layout.fragment_welcome_pager) {
                 }
 
                 Status.ERROR -> {
+                    if (Functions.db.wordDao().getCountOfWords() != 0) {
+                        startActivity()
+                    }
+                    Log.d("wordsObserver", "viewModelAndObservers: ${it.message} ")
                 }
             }
         }
@@ -134,6 +135,15 @@ class WelcomePagerFragment : Fragment(R.layout.fragment_welcome_pager) {
         }
     }
 
+
+    override fun onStop() {
+        super.onStop()
+        if (Functions.db.wordDao().getCountOfWords() != 0) {
+            SharedPreference.isWordsDownloaded = true
+            startActivity()
+        }
+    }
+
     override fun setMenuVisibility(menuVisible: Boolean) {
         super.setMenuVisibility(menuVisible)
         if (page == 4 && menuVisible) {
@@ -141,4 +151,5 @@ class WelcomePagerFragment : Fragment(R.layout.fragment_welcome_pager) {
             downloadingWords()
         }
     }
+
 }

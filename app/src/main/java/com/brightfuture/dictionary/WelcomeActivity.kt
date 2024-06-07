@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.recyclerview.widget.RecyclerView
@@ -32,8 +33,10 @@ class WelcomeActivity : AppCompatActivity() {
         SharedPreference.init(this)
         Functions.connectivityManager(this)
         screen()
-        setAdapter()
-        clicks()
+        if (!SharedPreference.isWordsDownloaded) {
+            setAdapter()
+            clicks()
+        }
     }
 
     private fun setAdapter() {
@@ -70,29 +73,29 @@ class WelcomeActivity : AppCompatActivity() {
         binding.skipLayout.setOnClickListener {
             if (page != 3) {
                 binding.welcomeViewPager.setCurrentItem(3, true)
+                viewPager.isUserInputEnabled = false
             }
         }
     }
 
     private fun screen() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            installSplashScreen()
+        } else {
+            setTheme(R.style.Theme_DictionaryWithCoroutines)
+        }
+        binding = ActivityWelcomeBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        CustomizeViews.appearanceStatusNavigationBars(window, 1)
+        CustomizeViews.statusNavigationBarsColor(
+            window,
+            this,
+            R.color.red_four,
+            R.color.red_two
+        )
         if (SharedPreference.isWordsDownloaded) {
             startActivity(Intent(this, MainActivity::class.java))
             finish()
-        } else {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                installSplashScreen()
-            } else {
-                setTheme(R.style.Theme_DictionaryWithCoroutines)
-            }
-            binding = ActivityWelcomeBinding.inflate(layoutInflater)
-            setContentView(binding.root)
-            CustomizeViews.appearanceStatusNavigationBars(window, 1)
-            CustomizeViews.statusNavigationBarsColor(
-                window,
-                this,
-                R.color.red_four,
-                R.color.red_two
-            )
         }
     }
 

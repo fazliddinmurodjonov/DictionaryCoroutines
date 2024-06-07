@@ -9,6 +9,7 @@ import com.brightfuture.adapters.WordsAdapter
 import com.brightfuture.dictionary.R
 import com.brightfuture.dictionary.databinding.FragmentSearchBinding
 import com.brightfuture.room.entity.Word
+import com.brightfuture.utils.Functions
 
 class SearchFragment : Fragment(R.layout.fragment_search) {
     private val binding: FragmentSearchBinding by viewBinding()
@@ -34,18 +35,8 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         }
 
         val wordsAdapter = WordsAdapter()
-
-        val wordsList = ArrayList<Word>()
-        for (i in 0..100) {
-            wordsList.add(Word(name = "Hello",
-                phonetic = "fɪˈnɛtɪk",
-                audioLink = "http://example.com/audio.mp3",
-                definition = "The study and classification of speech sounds",
-                example = "She is studying phonetics",
-                bookmark = 1,
-                seen = 1
-            ))        }
-        wordsAdapter.submitList(wordsList)
+        val wordsSearchedList = Functions.db.wordDao().getAllSearchedWords(1)
+        wordsAdapter.submitList(wordsSearchedList)
         binding.rvAllWords.adapter = wordsAdapter
 
     }

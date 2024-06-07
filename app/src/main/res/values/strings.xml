@@ -10,7 +10,7 @@
     <string name="sound">Sound</string>
     <string name="save">Save</string>
     <string name="info">Info</string>
-    <string name="found_words">Found 6969 words</string>
+    <string name="found_words">Found %1$d words</string>
     <string name="word_of_the_day">Word of the Day</string>
     <string name="copy">Copy</string>
     <string name="word_definition">Definition : (obsolete outside circus, acrobatics) To stand underneath,to support.</string>
