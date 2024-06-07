@@ -1,13 +1,9 @@
 package com.brightfuture.fragments
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import by.kirich1409.viewbindingdelegate.viewBinding
-import com.brightfuture.adapters.WordsAdapter
 import com.brightfuture.adapters.WordsBookmarkAdapter
 import com.brightfuture.dictionary.R
 import com.brightfuture.dictionary.databinding.FragmentBookmarkBinding
@@ -25,10 +21,15 @@ class BookmarkFragment : Fragment(R.layout.fragment_bookmark) {
 
     private fun createUI() {
         val wordsBookmarkList = Functions.db.wordDao().getAllBookmarkWords(1)
-        wordsBookmarkAdapter.submitList(wordsBookmarkList)
+        val wordsBookmarkArrayList: ArrayList<Word> = ArrayList(wordsBookmarkList)
+        wordsBookmarkAdapter.submitList(wordsBookmarkArrayList)
+
         binding.rvWordsBookmark.adapter = wordsBookmarkAdapter
-        wordsBookmarkAdapter.setOnItemClickListener {
-            Functions.db.wordDao().updateBookmark(it, 0)
+        wordsBookmarkAdapter.setOnItemClickListener { word, position ->
+            Functions.db.wordDao().updateBookmark(word.id, 0)
+            wordsBookmarkArrayList.remove(word)
+            binding.rvWordsBookmark.adapter?.notifyItemRemoved(position)
+            binding.rvWordsBookmark.adapter?.notifyItemRangeChanged(position, wordsBookmarkArrayList.size)
         }
     }
 }

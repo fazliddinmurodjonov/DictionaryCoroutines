@@ -15,7 +15,7 @@ class WordsBookmarkAdapter : ListAdapter<Word, WordsBookmarkAdapter.ViewHolder>(
     private var wordList: MutableList<Word> = mutableListOf()
 
     fun interface OnItemClickListener {
-        fun onClick(id: Long)
+        fun onClick(word: Word,position: Int)
     }
 
     fun setOnItemClickListener(listener: OnItemClickListener) {
@@ -27,23 +27,18 @@ class WordsBookmarkAdapter : ListAdapter<Word, WordsBookmarkAdapter.ViewHolder>(
         RecyclerView.ViewHolder(binding.root) {
         @SuppressLint("ResourceAsColor")
         fun onBind(word: Word, position: Int) {
+            Log.d("adapter", "position: ${position+1}. ${word.name}")
             binding.ordinalNumber.text = (position + 1).toString()
             binding.tvWord.text = word.name
             binding.tvWordDefinition.text = word.definition
             binding.tvWordExample.text = word.example
             binding.imgBookmark.setOnClickListener {
-                itemClick.onClick(word.id)
-                removeItem(bindingAdapterPosition)
+                itemClick.onClick(word,position)
+
             }
         }
     }
 
-    fun removeItem(position: Int) {
-        if (position < wordList.size) {
-            wordList.removeAt(position)
-            submitList(wordList.toList())
-        }
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
@@ -59,33 +54,26 @@ class WordsBookmarkAdapter : ListAdapter<Word, WordsBookmarkAdapter.ViewHolder>(
         holder.onBind(getItem(position), position)
     }
 
+
     class MyDiffUtil : DiffUtil.ItemCallback<Word>() {
-        override fun areItemsTheSame(
-            oldItem: Word,
-            newItem: Word,
-        ): Boolean {
+        override fun areItemsTheSame(oldItem: Word, newItem: Word): Boolean {
             return oldItem.id == newItem.id
         }
 
-
-        @SuppressLint("DiffUtilEquals")
-        override fun areContentsTheSame(
-            oldItem: Word,
-            newItem: Word,
-        ): Boolean {
+        override fun areContentsTheSame(oldItem: Word, newItem: Word): Boolean {
             return when {
-                oldItem.id != newItem.id -> {
+                oldItem.id == newItem.id -> {
                     false
                 }
 
                 else -> true
             }
         }
-
     }
 
     override fun submitList(list: List<Word>?) {
         wordList = list?.toMutableList() ?: mutableListOf()
         super.submitList(list)
     }
+
 }
