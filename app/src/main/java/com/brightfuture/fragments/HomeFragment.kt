@@ -12,10 +12,15 @@ import android.speech.RecognitionListener
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
 import android.speech.tts.TextToSpeech
+import android.text.Editable
+import android.text.TextWatcher
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver.OnGlobalLayoutListener
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -23,15 +28,18 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import by.kirich1409.viewbindingdelegate.viewBinding
+import com.brightfuture.adapters.AutoCompleteWordAdapter
 import com.brightfuture.adapters.WordsAdapter
 import com.brightfuture.dictionary.R
 import com.brightfuture.dictionary.databinding.FragmentHomeBinding
+import com.brightfuture.models.WordSearching
 import com.brightfuture.room.entity.Word
 import com.brightfuture.utils.ConnectivityManagers
 import com.brightfuture.utils.Functions
 import com.brightfuture.utils.SharedPreference
 import com.brightfuture.viewmodels.DictionaryViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.ArrayList
@@ -46,6 +54,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private lateinit var permissionRecordAudio: Observer<Int>
     private var speechRecognizer: SpeechRecognizer? = null
     private var speechRecognizerIntent: Intent? = null
+    private lateinit var autoCompleteWordAdapter: AutoCompleteWordAdapter
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         createUI()
@@ -82,6 +92,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         })
         wordsAdapter()
         randomWord()
+
         lifecycleScope.launch {
             val wordCount = withContext(Dispatchers.IO) {
                 Functions.db.wordDao().getCountOfWords()
@@ -93,6 +104,35 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 textToSpeech.language = Locale.UK
             }
         }
+
+        autoCompleteWordAdapter = AutoCompleteWordAdapter(requireContext(), emptyList())
+        binding.autoCompleteText.setAdapter(autoCompleteWordAdapter)
+        // Observe suggestions
+        lifecycleScope.launch {
+            dictionaryViewModel.suggestions.collectLatest { words ->
+                autoCompleteWordAdapter.setWords(words)
+            }
+        }
+
+
+        // Listen for text changes
+        binding.autoCompleteText.addTextChangedListener(object : TextWatcher {
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun afterTextChanged(s: Editable?) {
+                dictionaryViewModel.searchingWords(s.toString())
+
+            }
+        })
+
+        binding.autoCompleteText.onItemClickListener =
+            AdapterView.OnItemClickListener { parent, _, position, _ ->
+                val wordSearching = autoCompleteWordAdapter.getItem(position) as WordSearching
+                binding.autoCompleteText.setText(wordSearching.name)
+            }
+
     }
 
     private fun viewModelAndObservers() {
@@ -313,55 +353,44 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         }
     }
 
-    @SuppressLint("SetTextI18n")
-    private fun searchingWords() {
-
-        //load item
-    //    val lastWord = sPref.getString("last", "")
-//        currentWord = if (lastWord.equals("")) {
-//            listWord?.get(0)
-//        } else {
-//            database.wordDao().getWordByName(lastWord!!)
+//    @SuppressLint("SetTextI18n")
+//    private fun searchingWords() {
+//
+//       val  adapter = AutoCompleteAdapter(requireContext(), itemList)
+//        binding.autoCompleteText.setAdapter(adapter)
+//        binding.autoCompleteText.onItemClickListener = object : AdapterView.OnItemClickListener {
+//            @SuppressLint("SetTextI18n")
+//            override fun onItemClick(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+//                val myItem = adapter.getItem(p2) as MyItem
+//                if (myItem.isExist) {
+//                    val word = database.wordDao().getWordByName(myItem.name)
+//                    loadWord(word)
+//                    binding.autoCompleteText.text.clear()
+//                    switchOneAndAll(false)
+//                    saveSearchItem()
+//                } else {
+//                    fetchAndSaveWord(myItem.name)
+//                }
+//                hideKeyboard()
+//            }
+//
 //        }
-       // loadWord(currentWord!!)
-
-      //  val itemList: java.util.ArrayList<MyItem> = arrayListOf()
-//        listWord!!.forEach {
-//            itemList.add(MyItem(it.word))
-//        }
-       val  adapter = AutoCompleteAdapter(requireContext(), itemList)
-        binding.autoCompleteText.setAdapter(adapter)
-        binding.autoCompleteText.onItemClickListener = object : AdapterView.OnItemClickListener {
-            @SuppressLint("SetTextI18n")
-            override fun onItemClick(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                val myItem = adapter.getItem(p2) as MyItem
-                if (myItem.isExist) {
-                    val word = database.wordDao().getWordByName(myItem.name)
-                    loadWord(word)
-                    binding.autoCompleteText.text.clear()
-                    switchOneAndAll(false)
-                    saveSearchItem()
-                } else {
-                    fetchAndSaveWord(myItem.name)
-                }
-                hideKeyboard()
-            }
-
-        }
+//
+//
+//        allItemAdapter = WordAdapter(listWord!!, object : WordAdapter.OnItemClickListener {
+//            override fun onItemClick(wordEntity: WordEntity) {
+//                loadWord(wordEntity)
+//                switchOneAndAll(false)
+//            }
+//
+//        })
+//
+//        binding.rv.adapter = allItemAdapter
+//        binding.rv.addItemDecoration(
+//            DividerItemDecoration(binding.rv.context,
+//            DividerItemDecoration.VERTICAL)
+//        )
+//    }
 
 
-        allItemAdapter = WordAdapter(listWord!!, object : WordAdapter.OnItemClickListener {
-            override fun onItemClick(wordEntity: WordEntity) {
-                loadWord(wordEntity)
-                switchOneAndAll(false)
-            }
-
-        })
-
-        binding.rv.adapter = allItemAdapter
-        binding.rv.addItemDecoration(
-            DividerItemDecoration(binding.rv.context,
-            DividerItemDecoration.VERTICAL)
-        )
-    }
 }

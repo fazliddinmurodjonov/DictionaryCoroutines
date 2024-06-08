@@ -6,8 +6,10 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.brightfuture.models.WordHistory
+import com.brightfuture.models.WordFlow
 import com.brightfuture.room.entity.Word
 import io.reactivex.rxjava3.core.Flowable
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface WordDao {
@@ -53,5 +55,6 @@ interface WordDao {
 
     @Query("SELECT * FROM word ORDER BY RANDOM() LIMIT 1")
     fun getRandomWord(): Word
-
+    @Query("SELECT id,name FROM Word WHERE name LIKE :query || '%' LIMIT 5")
+    fun searchingWords(query: String): Flow<List<WordFlow>>
 }
