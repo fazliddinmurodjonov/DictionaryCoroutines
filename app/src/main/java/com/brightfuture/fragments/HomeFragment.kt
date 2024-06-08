@@ -92,7 +92,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         })
         wordsAdapter()
         randomWord()
-
         lifecycleScope.launch {
             val wordCount = withContext(Dispatchers.IO) {
                 Functions.db.wordDao().getCountOfWords()
@@ -104,7 +103,10 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 textToSpeech.language = Locale.UK
             }
         }
+        autoCompleteTextView()
+    }
 
+    private fun autoCompleteTextView() {
         autoCompleteWordAdapter = AutoCompleteWordAdapter(requireContext(), emptyList())
         binding.autoCompleteText.setAdapter(autoCompleteWordAdapter)
         // Observe suggestions
@@ -113,9 +115,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 autoCompleteWordAdapter.setWords(words)
             }
         }
-
-
-        // Listen for text changes
         binding.autoCompleteText.addTextChangedListener(object : TextWatcher {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
             }
@@ -123,14 +122,15 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun afterTextChanged(s: Editable?) {
                 dictionaryViewModel.searchingWords(s.toString())
-
             }
         })
 
         binding.autoCompleteText.onItemClickListener =
             AdapterView.OnItemClickListener { parent, _, position, _ ->
-                val wordSearching = autoCompleteWordAdapter.getItem(position) as WordSearching
-                binding.autoCompleteText.setText(wordSearching.name)
+                val selectWord = autoCompleteWordAdapter.getItem(position)
+                Functions.db.wordDao().updateSearched(selectWord.id,1)
+                setWordToViews(Functions.db.wordDao().getWordById(selectWord.id))
+                binding.autoCompleteText.setText("")
             }
 
     }

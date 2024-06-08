@@ -25,6 +25,9 @@ interface WordDao {
     @Query("UPDATE Word SET seen = :seen WHERE id = :wordId")
     fun updateSeen(wordId: Long, seen: Int)
 
+    @Query("UPDATE Word SET searched = :searched WHERE id = :wordId")
+    fun updateSearched(wordId: Long, searched: Int)
+
     @Query("UPDATE Word SET seen = :seen WHERE id IN (:wordIds)")
     fun updateSeenList(wordIds: List<Long>, seen: Int)
 
@@ -33,6 +36,9 @@ interface WordDao {
 
     @Query("SELECT * FROM Word WHERE name = :name")
     fun getWordByName(name: String): Word
+
+    @Query("SELECT * FROM Word WHERE id = :id")
+    fun getWordById(id: Long): Word
 
     @Query("SELECT * FROM Word")
     fun getAllWords(): List<Word>
