@@ -1,28 +1,40 @@
 package com.brightfuture.fragments
 
+import android.annotation.SuppressLint
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.content.Intent
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
+import android.speech.RecognitionListener
+import android.speech.RecognizerIntent
+import android.speech.SpeechRecognizer
 import android.speech.tts.TextToSpeech
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.brightfuture.adapters.WordsAdapter
 import com.brightfuture.dictionary.R
 import com.brightfuture.dictionary.databinding.FragmentHomeBinding
 import com.brightfuture.room.entity.Word
+import com.brightfuture.utils.ConnectivityManagers
 import com.brightfuture.utils.Functions
+import com.brightfuture.utils.SharedPreference
+import com.brightfuture.viewmodels.DictionaryViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.ArrayList
 import java.util.Locale
 
 
@@ -30,14 +42,19 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private val binding: FragmentHomeBinding by viewBinding()
     var word = Word()
     private lateinit var textToSpeech: TextToSpeech
-
+    private lateinit var dictionaryViewModel: DictionaryViewModel
+    private lateinit var permissionRecordAudio: Observer<Int>
+    private var speechRecognizer: SpeechRecognizer? = null
+    private var speechRecognizerIntent: Intent? = null
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         createUI()
     }
 
     private fun createUI() {
+        SharedPreference.init(requireContext())
         clicks()
+        viewModelAndObservers()
         with(binding)
         {
             copyLayout.imgWordFunction.setImageResource(R.drawable.copy_word)
@@ -78,6 +95,28 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         }
     }
 
+    private fun viewModelAndObservers() {
+        dictionaryViewModel = ViewModelProvider(this)[DictionaryViewModel::class.java]
+        permissionRecordAudio = Observer {
+            when (it) {
+                1 -> {
+                    SharedPreference.audioPermission = it
+                    setUpSpeech()
+                }
+
+                0 -> {
+                    SharedPreference.audioPermission = it
+                }
+
+                -1 -> {
+                    SharedPreference.audioPermission = it
+                    Functions.appDetailsSettings()
+                }
+
+            }
+        }
+    }
+
     private fun randomWord() {
         val randomWord = Functions.db.wordDao().getRandomWord()
         setWordToViews(randomWord)
@@ -97,13 +136,14 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     }
 
     private fun wordsAdapter() {
-        val wordsAdapter = WordsAdapter()
+        val wordsAdapter = WordsAdapter(false)
         val wordsList = Functions.db.wordDao().getAllWords()
         wordsAdapter.submitList(wordsList)
         binding.rvAllWords.adapter = wordsAdapter
         binding.autoCompleteText.isSingleLine = true
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private fun clicks() {
         binding.tvWordOfTheDay.setOnClickListener {
             wordsDayAndAll(false)
@@ -117,6 +157,25 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         binding.cvCopyOfSearch.setOnClickListener {
             pasteTextFromClipboard()
         }
+        binding.cvMicrophoneOfSearch.setOnClickListener {
+            if (SharedPreference.audioPermission == 1) {
+                setUpSpeech()
+                binding.cvMicrophoneOfSearch.setOnTouchListener { view, motionEvent ->
+                    if (motionEvent.action == MotionEvent.ACTION_UP) {
+                        speechRecognizer!!.stopListening()
+                    }
+                    if (motionEvent.action == MotionEvent.ACTION_DOWN) {
+                        binding.imageMicrophoneOfSearch.setImageResource(R.drawable.microphone)
+                        speechRecognizer!!.startListening(speechRecognizerIntent!!)
+                    }
+                    false
+                }
+            } else {
+                dictionaryViewModel.permissionOfRecordAudio(requireContext())
+                    .observe(viewLifecycleOwner, permissionRecordAudio)
+            }
+        }
+
         binding.copyLayout.cvWordFunction.setOnClickListener {
             copyTextFromClipboard(word.name)
         }
@@ -129,34 +188,79 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         binding.shareLayout.cvWordFunction.setOnClickListener {
             Functions.shareWord(word, requireContext())
         }
+
     }
 
     private fun listenAudio() {
-//        if (networkConnected) {
-//            val player = MediaPlayer.create(requireContext(),
-//                Uri.parse("https:${currentWord?.audio_link}"))
-//            if (player != null)
-//                player.start()
-//            else {
-//                tts.speak(currentWord?.word, TextToSpeech.QUEUE_FLUSH, null, "null")
-//            }
-//        } else {
-//            tts.speak(currentWord?.word, TextToSpeech.QUEUE_FLUSH, null, "null")
-//        }
-
-
-        val player = MediaPlayer.create(
-            requireContext(),
-            Uri.parse(word.audioLink)
-        )
-        if (player != null)
-            player.start()
-        else {
+        if (ConnectivityManagers.isNetworkAvailable) {
+            val player = MediaPlayer.create(
+                requireContext(),
+                Uri.parse(word.audioLink)
+            )
+            if (player != null)
+                player.start()
+            else {
+                textToSpeech.speak(word.name, TextToSpeech.QUEUE_FLUSH, null, "null")
+            }
+        } else {
             textToSpeech.speak(word.name, TextToSpeech.QUEUE_FLUSH, null, "null")
         }
+    }
 
-        //  textToSpeech.speak(word.name, TextToSpeech.QUEUE_FLUSH, null, "null")
 
+    private fun setUpSpeech() {
+        speechRecognizer = SpeechRecognizer.createSpeechRecognizer(requireContext())
+        speechRecognizerIntent =
+            Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
+        speechRecognizerIntent?.putExtra(
+            RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+            RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
+        )
+        speechRecognizerIntent?.putExtra(
+            RecognizerIntent.EXTRA_LANGUAGE,
+            Locale.getDefault()
+        )
+        speechRecognizer!!.setRecognitionListener(object : RecognitionListener {
+            override fun onReadyForSpeech(p0: Bundle?) {
+
+            }
+
+            override fun onBeginningOfSpeech() {
+                binding.autoCompleteText.hint = "Listening..."
+            }
+
+            override fun onRmsChanged(p0: Float) {
+
+            }
+
+            override fun onBufferReceived(p0: ByteArray?) {
+
+            }
+
+            override fun onEndOfSpeech() {
+
+            }
+
+            override fun onError(p0: Int) {
+
+            }
+
+            override fun onResults(bundle: Bundle?) {
+                binding.imageMicrophoneOfSearch.setImageResource(R.drawable.microphone)
+                val data: ArrayList<String> =
+                    bundle?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION) as ArrayList<String>
+                binding.autoCompleteText.setText(data[0])
+            }
+
+            override fun onPartialResults(p0: Bundle?) {
+
+            }
+
+            override fun onEvent(p0: Int, p1: Bundle?) {
+
+            }
+
+        })
     }
 
     private fun bookmarkWord() {
@@ -198,58 +302,66 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         binding.tvAllWords.setTextColor(colorAllWords)
     }
 
-//    @SuppressLint("SetTextI18n")
-//    private fun loadData() {
-//      //    listWord = database.wordDao().getAllWords()
-//
-//       // binding.foundWordsTv.text = "found ${listWord!!.size} words offline"
-//
-//        //load item
-//    //    val lastWord = sPref.getString("last", "")
-////        currentWord = if (lastWord.equals("")) {
-////            listWord?.get(0)
-////        } else {
-////            database.wordDao().getWordByName(lastWord!!)
-////        }
-//       // loadWord(currentWord!!)
-//
-//      //  val itemList: java.util.ArrayList<MyItem> = arrayListOf()
-////        listWord!!.forEach {
-////            itemList.add(MyItem(it.word))
-////        }
-//       val  adapter = AutoCompleteAdapter(requireContext(), itemList)
-//        binding.autoCompleteText.setAdapter(adapter)
-//        binding.autoCompleteText.onItemClickListener = object : AdapterView.OnItemClickListener {
-//            @SuppressLint("SetTextI18n")
-//            override fun onItemClick(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-//                val myItem = adapter.getItem(p2) as MyItem
-//                if (myItem.isExist) {
-//                    val word = database.wordDao().getWordByName(myItem.name)
-//                    loadWord(word)
-//                    binding.autoCompleteText.text.clear()
-//                    switchOneAndAll(false)
-//                    saveSearchItem()
-//                } else {
-//                    fetchAndSaveWord(myItem.name)
-//                }
-//                hideKeyboard()
-//            }
-//
+    override fun onResume() {
+        super.onResume()
+        if (Functions.isRecordAudioPermissionGranted(requireContext())) {
+            SharedPreference.audioPermission = 1
+        } else {
+            if (SharedPreference.audioPermission != -1) {
+                SharedPreference.audioPermission = 0
+            }
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun searchingWords() {
+
+        //load item
+    //    val lastWord = sPref.getString("last", "")
+//        currentWord = if (lastWord.equals("")) {
+//            listWord?.get(0)
+//        } else {
+//            database.wordDao().getWordByName(lastWord!!)
 //        }
-//
-//
-//        allItemAdapter = WordAdapter(listWord!!, object : WordAdapter.OnItemClickListener {
-//            override fun onItemClick(wordEntity: WordEntity) {
-//                loadWord(wordEntity)
-//                switchOneAndAll(false)
-//            }
-//
-//        })
-//
-//        binding.rv.adapter = allItemAdapter
-//        binding.rv.addItemDecoration(
-//            DividerItemDecoration(binding.rv.context,
-//            DividerItemDecoration.VERTICAL)
-//        )
-//    }
+       // loadWord(currentWord!!)
+
+      //  val itemList: java.util.ArrayList<MyItem> = arrayListOf()
+//        listWord!!.forEach {
+//            itemList.add(MyItem(it.word))
+//        }
+       val  adapter = AutoCompleteAdapter(requireContext(), itemList)
+        binding.autoCompleteText.setAdapter(adapter)
+        binding.autoCompleteText.onItemClickListener = object : AdapterView.OnItemClickListener {
+            @SuppressLint("SetTextI18n")
+            override fun onItemClick(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                val myItem = adapter.getItem(p2) as MyItem
+                if (myItem.isExist) {
+                    val word = database.wordDao().getWordByName(myItem.name)
+                    loadWord(word)
+                    binding.autoCompleteText.text.clear()
+                    switchOneAndAll(false)
+                    saveSearchItem()
+                } else {
+                    fetchAndSaveWord(myItem.name)
+                }
+                hideKeyboard()
+            }
+
+        }
+
+
+        allItemAdapter = WordAdapter(listWord!!, object : WordAdapter.OnItemClickListener {
+            override fun onItemClick(wordEntity: WordEntity) {
+                loadWord(wordEntity)
+                switchOneAndAll(false)
+            }
+
+        })
+
+        binding.rv.adapter = allItemAdapter
+        binding.rv.addItemDecoration(
+            DividerItemDecoration(binding.rv.context,
+            DividerItemDecoration.VERTICAL)
+        )
+    }
 }

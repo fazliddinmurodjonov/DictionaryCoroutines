@@ -3,15 +3,22 @@ package com.brightfuture.utils
 import android.Manifest
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.ConnectivityManager
+import android.net.Uri
+import android.provider.Settings
 import android.util.Log
+import androidx.core.content.ContextCompat
 import com.brightfuture.dictionary.R
 import com.brightfuture.models.word_response.WordResponseItem
 import com.brightfuture.retrofit.ApiClient
 import com.brightfuture.room.database.WordDB
 import com.brightfuture.room.entity.Word
 import com.karumi.dexter.Dexter
+import com.karumi.dexter.PermissionToken
+import com.karumi.dexter.listener.PermissionDeniedResponse
 import com.karumi.dexter.listener.PermissionGrantedResponse
+import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.single.PermissionListener
 
 object Functions {
@@ -66,8 +73,7 @@ object Functions {
                 break
             }
         }
-        if (word.definition=="" && word.example=="")
-        {
+        if (word.definition == "" && word.example == "") {
             Log.d(
                 "repository",
                 "word : ${wordResponseItem.word}"
@@ -80,7 +86,8 @@ object Functions {
     }
 
     fun shareWord(word: Word, context: Context) {
-        val shareText = "Word: ${word.name}\nDefinition: ${word.definition}\nExample: ${word.example}\nAudioLink: ${word.audioLink}"
+        val shareText =
+            "Word: ${word.name}\nDefinition: ${word.definition}\nExample: ${word.example}\nAudioLink: ${word.audioLink}"
         val sendIntent: Intent = Intent().apply {
             action = Intent.ACTION_SEND
             putExtra(
@@ -93,21 +100,29 @@ object Functions {
         context.startActivity(shareIntent)
     }
 
-    fun requestLocationPermissionAgain() {
+    fun audioPermission() {
+        SharedPreference.init(App.instance)
+        when (SharedPreference.audioPermission) {
+            -1 -> requestRecordAudioPermission()
+            0 -> requestRecordAudioPermission()
+            1 -> requestRecordAudioPermission()
+        }
+    }
+
+    private fun requestRecordAudioPermission() {
         Dexter.withContext(App.instance).withPermission(Manifest.permission.RECORD_AUDIO)
             .withListener(object : PermissionListener {
                 override fun onPermissionGranted(response: PermissionGrantedResponse?) {
-                    SharedPreference.permissionLocationForDialog = -1
+                    SharedPreference.audioPermission = 1
                 }
 
                 override fun onPermissionDenied(response: PermissionDeniedResponse?) {
                     if (response!!.isPermanentlyDenied) {
-                        if (SharedPreference.permissionLocationForDialog == 1) {
-                            appDetailsSettings()
-                        }
-                        SharedPreference.permissionLocationForDialog = 1
+                        SharedPreference.audioPermission = -1
+                        appDetailsSettings()
+
                     } else {
-                        SharedPreference.permissionLocationForDialog = 0
+                        SharedPreference.audioPermission = 0
                     }
                 }
 
@@ -120,5 +135,21 @@ object Functions {
             }).check()
     }
 
+    fun isRecordAudioPermissionGranted(context: Context): Boolean {
+        return ContextCompat.checkSelfPermission(
+            context,
+            Manifest.permission.RECORD_AUDIO
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+
+
+    fun appDetailsSettings() {
+        val intent = Intent()
+        intent.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+        val uri: Uri = Uri.fromParts("package", App.instance.packageName, null)
+        intent.data = uri
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        App.instance.startActivity(intent)
+    }
 
 }

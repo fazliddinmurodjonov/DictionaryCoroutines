@@ -31,7 +31,6 @@ class WelcomeActivity : AppCompatActivity() {
 
     private fun createUI() {
         SharedPreference.init(this)
-        Functions.connectivityManager(this)
         screen()
         if (!SharedPreference.isWordsDownloaded) {
             setAdapter()

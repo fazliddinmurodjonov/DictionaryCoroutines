@@ -9,7 +9,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.brightfuture.dictionary.databinding.ItemWordBinding
 import com.brightfuture.room.entity.Word
 
-class WordsAdapter() : ListAdapter<Word, WordsAdapter.ViewHolder>(MyDiffUtil()) {
+class WordsAdapter(var isSearched: Boolean) :
+    ListAdapter<Word, WordsAdapter.ViewHolder>(MyDiffUtil()) {
     private lateinit var itemClick: OnItemClickListener
     private var wordList: MutableList<Word> = mutableListOf()
 
@@ -31,7 +32,9 @@ class WordsAdapter() : ListAdapter<Word, WordsAdapter.ViewHolder>(MyDiffUtil()) 
             binding.tvWordDefinition.text = word.definition
             binding.tvWordExample.text = word.example
             binding.root.setOnClickListener {
+                if (isSearched) {
 
+                }
                 // removeItem(bindingAdapterPosition)
             }
         }

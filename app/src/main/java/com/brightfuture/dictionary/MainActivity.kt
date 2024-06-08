@@ -27,6 +27,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         createUI()
+        Functions.connectivityManager(this)
         createNavigation()
     }
 
@@ -84,6 +85,7 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
+
     private fun closeDrawer() {
         val drawer = findViewById<DrawerLayout>(R.id.drawer_layout)
         drawer.closeDrawer(GravityCompat.START)

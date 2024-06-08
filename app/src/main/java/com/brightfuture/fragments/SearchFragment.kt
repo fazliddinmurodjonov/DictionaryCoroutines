@@ -4,18 +4,20 @@ package com.brightfuture.fragments
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
+import android.widget.Toast
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.brightfuture.adapters.WordsAdapter
 import com.brightfuture.dictionary.R
 import com.brightfuture.dictionary.databinding.FragmentSearchBinding
-import com.brightfuture.room.entity.Word
 import com.brightfuture.utils.Functions
+import kotlin.math.sign
 
 class SearchFragment : Fragment(R.layout.fragment_search) {
     private val binding: FragmentSearchBinding by viewBinding()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         createUI()
+
     }
 
     private fun createUI() {
@@ -34,12 +36,17 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                 resources.getText(R.string.share).toString().lowercase()
         }
 
-        val wordsAdapter = WordsAdapter()
+        val wordsAdapter = WordsAdapter(true)
         val wordsSearchedList = Functions.db.wordDao().getAllSearchedWords(1)
         wordsAdapter.submitList(wordsSearchedList)
-        binding.rvAllWords.adapter = wordsAdapter
+        binding.rvWordsSearched.adapter = wordsAdapter
+        imageEmpty(wordsSearchedList.size)
 
     }
 
+    private fun imageEmpty(count: Int) {
+        binding.imgEmpty.visibility = if (count == 0) View.VISIBLE else View.GONE
+        binding.searchLayout.visibility = if (count == 0) View.GONE else View.VISIBLE
+    }
 
 }
