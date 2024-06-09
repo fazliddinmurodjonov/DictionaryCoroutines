@@ -2,6 +2,7 @@ package com.brightfuture.viewmodels
 
 import android.Manifest
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -83,7 +84,22 @@ class DictionaryViewModel : ViewModel() {
                     val list = it.map { rawWord ->
                         WordSearching(id = rawWord.id, name = rawWord.name)
                     }
-                    _suggestions.value = list
+                    val wordList = ArrayList<WordSearching>()
+                    var isWordExist = false
+                    if (list.isNotEmpty()) {
+                        for (wordSearching in list) {
+                            if (wordSearching.name != query) {
+                                isWordExist = true
+                                break
+                            }
+                        }
+                    }
+                    if (!isWordExist)
+                    {
+                        wordList.add(WordSearching(0,query,false))
+                    }
+                    wordList.addAll(list)
+                    _suggestions.value = wordList
                 }
         }
     }
