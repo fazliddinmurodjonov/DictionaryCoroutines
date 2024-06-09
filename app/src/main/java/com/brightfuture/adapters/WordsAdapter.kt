@@ -27,15 +27,14 @@ class WordsAdapter(var isSearched: Boolean) :
         RecyclerView.ViewHolder(binding.root) {
         @SuppressLint("ResourceAsColor")
         fun onBind(word: Word, position: Int) {
-            binding.ordinalNumber.text = word.id.toString()
+            binding.ordinalNumber.text = (position+1).toString()
             binding.tvWord.text = word.name
             binding.tvWordDefinition.text = word.definition
             binding.tvWordExample.text = word.example
             binding.root.setOnClickListener {
                 if (isSearched) {
-
+                    itemClick.onClick(word.id)
                 }
-                // removeItem(bindingAdapterPosition)
             }
         }
     }

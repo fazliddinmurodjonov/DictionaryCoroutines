@@ -1,6 +1,8 @@
 package com.brightfuture.utils
 
 import android.Manifest
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -8,6 +10,7 @@ import android.net.ConnectivityManager
 import android.net.Uri
 import android.provider.Settings
 import android.util.Log
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.brightfuture.dictionary.R
 import com.brightfuture.models.word_response.WordResponseItem
@@ -86,6 +89,14 @@ object Functions {
         return db.wordDao().getIdByName(word.name).id
     }
 
+     fun copyTextFromClipboard(text: String,context: Context) {
+        val clipboardManager =
+            context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        val clipData = ClipData.newPlainText("Dictionary", text)
+        clipboardManager.setPrimaryClip(clipData)
+        // Optionally, show a toast to inform the user
+        Toast.makeText(context, "Copied to clipboard", Toast.LENGTH_SHORT).show()
+    }
     fun shareWord(word: Word, context: Context) {
         val shareText =
             "Word: ${word.name}\nDefinition: ${word.definition}\nExample: ${word.example}\nAudioLink: ${word.audioLink}"

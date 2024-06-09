@@ -37,6 +37,7 @@ import com.brightfuture.models.WordSearching
 import com.brightfuture.room.entity.Word
 import com.brightfuture.utils.ConnectivityManagers
 import com.brightfuture.utils.Functions
+import com.brightfuture.utils.Functions.copyTextFromClipboard
 import com.brightfuture.utils.Resource
 import com.brightfuture.utils.SharedPreference
 import com.brightfuture.utils.Status
@@ -255,7 +256,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         }
 
         binding.copyLayout.cvWordFunction.setOnClickListener {
-            copyTextFromClipboard(word.name)
+            copyTextFromClipboard(word.name,requireContext())
         }
         binding.soundLayout.cvWordFunction.setOnClickListener {
             listenAudio()
@@ -353,15 +354,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         val clipData = clipboardManager.primaryClip
         val item = clipData?.getItemAt(0)
         binding.autoCompleteText.setText(item?.text?.toString())
-    }
-
-    private fun copyTextFromClipboard(text: String) {
-        val clipboardManager =
-            requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-        val clipData = ClipData.newPlainText("Dictionary", text)
-        clipboardManager.setPrimaryClip(clipData)
-        // Optionally, show a toast to inform the user
-        Toast.makeText(requireContext(), "Copied to clipboard", Toast.LENGTH_SHORT).show()
     }
 
     private fun wordsDayAndAll(isAllWords: Boolean) {
