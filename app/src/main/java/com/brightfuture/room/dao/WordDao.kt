@@ -40,6 +40,11 @@ interface WordDao {
     @Query("SELECT * FROM Word WHERE id = :id")
     fun getWordById(id: Long): Word
 
+
+    @Query("SELECT * FROM Word WHERE name = :name")
+    fun getIdByName(name: String): Word
+
+
     @Query("SELECT * FROM Word")
     fun getAllWords(): List<Word>
 

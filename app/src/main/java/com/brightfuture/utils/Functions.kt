@@ -48,7 +48,7 @@ object Functions {
         )
     }
 
-    fun insertWord(wordResponseItem: WordResponseItem) {
+    fun insertWord(wordResponseItem: WordResponseItem):Long {
         val word = Word()
         word.name = wordResponseItem.word
         word.phonetic = if (wordResponseItem.phonetic != null) wordResponseItem.phonetic else ""
@@ -83,6 +83,7 @@ object Functions {
         word.bookmark = 0
         word.seen = 0
         db.wordDao().insert(word)
+        return db.wordDao().getIdByName(word.name).id
     }
 
     fun shareWord(word: Word, context: Context) {

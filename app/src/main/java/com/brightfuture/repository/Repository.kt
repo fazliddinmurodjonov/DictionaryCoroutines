@@ -4,6 +4,9 @@ import android.util.Log
 import com.brightfuture.models.word_response.WordResponse
 import com.brightfuture.utils.Functions
 import com.brightfuture.utils.Resource
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import java.io.IOException
@@ -29,7 +32,25 @@ object Repository {
         }
     }
 
-    suspend fun getWord(): Resource<Boolean> {
-        return Resource.success(true)
+    suspend fun getWord(wordName: String): Resource<Long> {
+        var id: Long = 0
+        return try {
+            coroutineScope {
+                val getWordResponse = async {
+                    Functions.service.getWord(wordName)
+                }.await()
+                if (getWordResponse.isSuccessful) {
+                    id = Functions.insertWord(getWordResponse.body()!![0])
+                    Resource.success(id)
+                } else {
+                    Resource.error("Response code :${getWordResponse.code()}", id)
+                }
+                Resource.success(id)
+            }
+        } catch (e: IOException) {
+            Resource.error("Network error: $e", id)
+        } catch (e: Exception) {
+            Resource.error("Unexpected error: $e", id)
+        }
     }
 }

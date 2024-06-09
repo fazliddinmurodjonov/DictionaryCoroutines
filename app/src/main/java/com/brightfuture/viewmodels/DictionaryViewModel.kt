@@ -2,12 +2,10 @@ package com.brightfuture.viewmodels
 
 import android.Manifest
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.brightfuture.models.WordFlow
 import com.brightfuture.models.WordSearching
 import com.brightfuture.repository.Repository
 import com.brightfuture.utils.Functions
@@ -38,10 +36,11 @@ class DictionaryViewModel : ViewModel() {
         return response
     }
 
-    fun getWord(): LiveData<Resource<Boolean>> {
-        val response = MutableLiveData<Resource<Boolean>>()
+    fun getWord(wordName:String): LiveData<Resource<Long>> {
+        val response = MutableLiveData<Resource<Long>>()
+        response.postValue(Resource.loading(null))
         viewModelScope.launch {
-            response.postValue(Repository.getWord())
+            response.postValue(Repository.getWord(wordName))
         }
         return response
     }

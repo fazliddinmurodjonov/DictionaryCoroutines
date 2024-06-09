@@ -19,6 +19,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver.OnGlobalLayoutListener
+import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
@@ -36,7 +37,9 @@ import com.brightfuture.models.WordSearching
 import com.brightfuture.room.entity.Word
 import com.brightfuture.utils.ConnectivityManagers
 import com.brightfuture.utils.Functions
+import com.brightfuture.utils.Resource
 import com.brightfuture.utils.SharedPreference
+import com.brightfuture.utils.Status
 import com.brightfuture.viewmodels.DictionaryViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
@@ -52,6 +55,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private lateinit var textToSpeech: TextToSpeech
     private lateinit var dictionaryViewModel: DictionaryViewModel
     private lateinit var permissionRecordAudio: Observer<Int>
+    private lateinit var wordObserver: Observer<Resource<Long>>
     private var speechRecognizer: SpeechRecognizer? = null
     private var speechRecognizerIntent: Intent? = null
     private lateinit var autoCompleteWordAdapter: AutoCompleteWordAdapter
@@ -65,8 +69,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         SharedPreference.init(requireContext())
         clicks()
         viewModelAndObservers()
-        with(binding)
-        {
+        with(binding) {
             copyLayout.imgWordFunction.setImageResource(R.drawable.copy_word)
             soundLayout.imgWordFunction.setImageResource(R.drawable.sound)
             bookmarkLayout.imgWordFunction.setImageResource(R.drawable.bookmark_word)
@@ -92,12 +95,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         })
         wordsAdapter()
         randomWord()
-        lifecycleScope.launch {
-            val wordCount = withContext(Dispatchers.IO) {
-                Functions.db.wordDao().getCountOfWords()
-            }
-            binding.tvFoundWords.text = getString(R.string.found_words, wordCount)
-        }
+        setFoundWordsCount()
         textToSpeech = TextToSpeech(requireContext()) { status ->
             if (status != TextToSpeech.ERROR) {
                 textToSpeech.language = Locale.UK
@@ -106,10 +104,18 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         autoCompleteTextView()
     }
 
+    private fun setFoundWordsCount() {
+        lifecycleScope.launch {
+            val wordCount = withContext(Dispatchers.IO) {
+                Functions.db.wordDao().getCountOfWords()
+            }
+            binding.tvFoundWords.text = getString(R.string.found_words, wordCount)
+        }
+    }
+
     private fun autoCompleteTextView() {
         autoCompleteWordAdapter = AutoCompleteWordAdapter(requireContext(), emptyList())
         binding.autoCompleteText.setAdapter(autoCompleteWordAdapter)
-        // Observe suggestions
         lifecycleScope.launch {
             dictionaryViewModel.suggestions.collectLatest { wordList ->
                 autoCompleteWordAdapter.setWords(wordList)
@@ -118,6 +124,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         binding.autoCompleteText.addTextChangedListener(object : TextWatcher {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
             }
+
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun afterTextChanged(s: Editable?) {
                 dictionaryViewModel.searchingWords(s.toString())
@@ -127,9 +134,23 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         binding.autoCompleteText.onItemClickListener =
             AdapterView.OnItemClickListener { parent, _, position, _ ->
                 val selectWord = autoCompleteWordAdapter.getItem(position)
-                Functions.db.wordDao().updateSearched(selectWord.id, 1)
-                setWordToViews(Functions.db.wordDao().getWordById(selectWord.id))
+                if (selectWord.id != 0L) {
+                    Functions.db.wordDao().updateSearched(selectWord.id, 1)
+                    setWordToViews(Functions.db.wordDao().getWordById(selectWord.id))
+                } else {
+                    if (ConnectivityManagers.isNetworkAvailable) {
+                        dictionaryViewModel.getWord(selectWord.name)
+                            .observe(viewLifecycleOwner, wordObserver)
+                    } else {
+                        Toast.makeText(
+                            requireContext(),
+                            resources.getText(R.string.no_internet_connection),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
                 binding.autoCompleteText.setText("")
+                hideKeyboard()
             }
 
     }
@@ -151,7 +172,24 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                     SharedPreference.audioPermission = it
                     Functions.appDetailsSettings()
                 }
+            }
+        }
+        wordObserver = Observer {
+            when (it.status) {
+                Status.LOADING -> {
 
+                }
+
+                Status.SUCCESS -> {
+                    val word = Functions.db.wordDao().getWordById(it.data!!)
+                    Functions.db.wordDao().updateSearched(it.data, 1)
+                    setWordToViews(word)
+                    setFoundWordsCount()
+                }
+
+                Status.ERROR -> {
+                    Toast.makeText(requireContext(), "${it.message}", Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }
@@ -189,6 +227,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         }
         binding.tvAllWords.setOnClickListener {
             wordsDayAndAll(true)
+            hideKeyboard()
         }
         binding.imgRandomWord.setOnClickListener {
             randomWord()
@@ -233,11 +272,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private fun listenAudio() {
         if (ConnectivityManagers.isNetworkAvailable) {
             val player = MediaPlayer.create(
-                requireContext(),
-                Uri.parse(word.audioLink)
+                requireContext(), Uri.parse(word.audioLink)
             )
-            if (player != null)
-                player.start()
+            if (player != null) player.start()
             else {
                 textToSpeech.speak(word.name, TextToSpeech.QUEUE_FLUSH, null, "null")
             }
@@ -249,15 +286,12 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private fun setUpSpeech() {
         speechRecognizer = SpeechRecognizer.createSpeechRecognizer(requireContext())
-        speechRecognizerIntent =
-            Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
+        speechRecognizerIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
         speechRecognizerIntent?.putExtra(
-            RecognizerIntent.EXTRA_LANGUAGE_MODEL,
-            RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
+            RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
         )
         speechRecognizerIntent?.putExtra(
-            RecognizerIntent.EXTRA_LANGUAGE,
-            Locale.getDefault()
+            RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault()
         )
         speechRecognizer!!.setRecognitionListener(object : RecognitionListener {
             override fun onReadyForSpeech(p0: Bundle?) {
@@ -391,5 +425,11 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 //        )
 //    }
 
-
+    fun hideKeyboard() {
+        requireActivity().currentFocus?.let { view ->
+            val imm =
+                requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+            imm?.hideSoftInputFromWindow(view.windowToken, 0)
+        }
+    }
 }
