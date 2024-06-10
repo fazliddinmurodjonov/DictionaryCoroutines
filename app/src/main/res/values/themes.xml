@@ -37,7 +37,7 @@
         <item name="background">@color/red_four</item>
     </style>
 
-    <style name="NavigationTextStyle" parent="android:Widget.TextView">
+    <style name="NavigationTextStyle" parent="TextAppearance.AppCompat.Body1">
         <item name="android:fontFamily">@font/roboto_slab</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">16sp</item>

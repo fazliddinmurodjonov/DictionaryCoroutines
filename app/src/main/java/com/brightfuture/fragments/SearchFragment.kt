@@ -5,10 +5,8 @@ import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.View
-import android.widget.Toast
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.brightfuture.adapters.WordsAdapter
 import com.brightfuture.dictionary.R
@@ -17,8 +15,8 @@ import com.brightfuture.room.entity.Word
 import com.brightfuture.utils.ConnectivityManagers
 import com.brightfuture.utils.Functions
 import com.brightfuture.utils.Functions.copyTextFromClipboard
+import com.brightfuture.utils.SharedPreference
 import java.util.Locale
-import kotlin.math.sign
 
 class SearchFragment : Fragment(R.layout.fragment_search) {
     private val binding: FragmentSearchBinding by viewBinding()
@@ -40,7 +38,13 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             listenAudio()
         }
         binding.fontLayout.cvWordFunction.setOnClickListener {
-
+            if (SharedPreference.upperCaseFont == 1) {
+                binding.tvWord.isAllCaps = false
+                SharedPreference.upperCaseFont = 0
+            } else {
+                SharedPreference.upperCaseFont = 1
+                binding.tvWord.isAllCaps = true
+            }
         }
         binding.copyLayout.cvWordFunction.setOnClickListener {
             copyTextFromClipboard(word.name, requireContext())
@@ -64,7 +68,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         Functions.db.wordDao().updateBookmark(word.id, word.bookmark)
     }
 
-    private fun setWordToViews(id:Long) {
+    private fun setWordToViews(id: Long) {
         word = Functions.db.wordDao().getWordById(id)
         binding.tvWord.text = word.name
         Functions.db.wordDao().updateSeen(word.id, 1)
@@ -76,6 +80,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     }
 
     private fun createUI() {
+        SharedPreference.init(requireContext())
         textToSpeech = TextToSpeech(requireContext()) { status ->
             if (status != TextToSpeech.ERROR) {
                 textToSpeech.language = Locale.UK
@@ -88,20 +93,21 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             bookmarkLayout.imgWordFunction.setImageResource(R.drawable.bookmark_search)
             shareLayout.imgWordFunction.setImageResource(R.drawable.share_search)
             fontLayout.tvWordFunction.text =
-                resources.getText(R.string.sound).toString().lowercase()
+                resources.getText(R.string.font).toString().lowercase()
             copyLayout.tvWordFunction.text = resources.getText(R.string.copy).toString().lowercase()
             bookmarkLayout.tvWordFunction.text =
                 resources.getText(R.string.save).toString().lowercase()
             shareLayout.tvWordFunction.text =
                 resources.getText(R.string.share).toString().lowercase()
         }
-
+        if (SharedPreference.upperCaseFont == 1) {
+            binding.tvWord.isAllCaps = true
+        }
         val wordsSearchedList = Functions.db.wordDao().getAllSearchedWords(1)
         wordsAdapter.submitList(wordsSearchedList)
         binding.rvWordsSearched.adapter = wordsAdapter
-        if (wordsSearchedList.isNotEmpty())
-        {
-            word= wordsSearchedList[0]
+        if (wordsSearchedList.isNotEmpty()) {
+            word = wordsSearchedList[0]
             setWordToViews(word.id)
         }
         imageEmpty(wordsSearchedList.size)

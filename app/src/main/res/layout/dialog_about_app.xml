@@ -30,14 +30,14 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:layout_marginStart="25dp"
-                android:layout_marginTop="25dp"
+                android:layout_marginTop="15dp"
                 android:layout_marginEnd="25dp"
                 android:fontFamily="@font/roboto_slab"
                 android:justificationMode="inter_word"
                 android:lineSpacingExtra="2dp"
                 android:text="@string/about_app"
                 android:textColor="@color/white"
-                android:textSize="24sp" />
+                android:textSize="22sp" />
 
             <TextView
                 android:id="@+id/aboutAppBody"

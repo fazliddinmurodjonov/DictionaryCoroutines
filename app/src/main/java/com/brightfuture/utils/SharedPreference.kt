@@ -28,4 +28,10 @@ object SharedPreference {
             it.putInt("audioPermission", value)
         }
 
+    var upperCaseFont: Int
+        get() = sharedPreference.getInt("upperCaseFont", 0)
+        set(value) = sharedPreference.edit {
+            it.putInt("upperCaseFont", value)
+        }
+
 }

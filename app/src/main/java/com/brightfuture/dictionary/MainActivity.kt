@@ -3,8 +3,12 @@ package com.brightfuture.dictionary
 import android.content.Context
 import android.content.res.Configuration
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.TypefaceSpan
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
@@ -37,6 +41,23 @@ class MainActivity : AppCompatActivity() {
         CustomizeViews.appearanceStatusNavigationBars(window, 0)
         CustomizeViews.statusNavigationBarsColor(window, this, R.color.red_four, R.color.white)
         clickMenu()
+        changeFontOfNavView()
+
+    }
+
+    private fun changeFontOfNavView() {
+        val typeface = ResourcesCompat.getFont(this, R.font.roboto_slab)
+        for (i in 0 until binding.navView.menu.size()) {
+            val menuItem = binding.navView.menu.getItem(i)
+            val spanString = SpannableString(menuItem.title)
+            spanString.setSpan(
+                TypefaceSpan(typeface!!),
+                0,
+                spanString.length,
+                Spannable.SPAN_INCLUSIVE_INCLUSIVE
+            )
+            menuItem.title = spanString
+        }
     }
 
     private fun createNavigation() {
@@ -79,7 +100,7 @@ class MainActivity : AppCompatActivity() {
             true
         }
         aboutItem.setOnMenuItemClickListener {
-            CustomizeViews.showBottomSheetDialog(supportFragmentManager, "about_app")
+            CustomizeViews.showDialog(supportFragmentManager, "about_app")
             closeDrawer()
             true
         }
