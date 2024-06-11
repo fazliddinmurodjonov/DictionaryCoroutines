@@ -43,9 +43,8 @@ object Repository {
                     id = Functions.insertWord(getWordResponse.body()!![0])
                     Resource.success(id)
                 } else {
-                    Resource.error("Response code :${getWordResponse.code()}", id)
+                    Resource.error("Word isn't found", id)
                 }
-                Resource.success(id)
             }
         } catch (e: IOException) {
             Resource.error("Network error: $e", id)
